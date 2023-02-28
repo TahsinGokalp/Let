@@ -1,19 +1,17 @@
 <?php
 
-namespace LaraBug\Http\Controllers;
+namespace Let\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class LaraBugReportController
+class LetReportController
 {
     /**
-     * @param Request $request
      * @return \Illuminate\Http\Response|\Illuminate\Contracts\Routing\ResponseFactory
      */
     public function report(Request $request)
     {
-        /** @var \LaraBug\LaraBug $laraBug */
-        $laraBug = app('larabug');
+        $laraBug = app('let');
 
         $laraBug->handle(
             new \ErrorException($request->input('message')),

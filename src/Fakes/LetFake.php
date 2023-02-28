@@ -4,22 +4,19 @@ namespace LaraBug\Fakes;
 
 use PHPUnit\Framework\Assert as PHPUnit;
 
-class LaraBugFake extends \LaraBug\LaraBug
+class LetFake extends \TahsinGokalp\Let
 {
     /** @var array */
     public $exceptions = [];
 
-    /**
-     * @param int $expectedCount
-     */
     public function assertRequestsSent(int $expectedCount)
     {
         PHPUnit::assertCount($expectedCount, $this->exceptions);
     }
 
     /**
-     * @param mixed $throwable
-     * @param callable|null $callback
+     * @param  mixed  $throwable
+     * @param  callable|null  $callback
      */
     public function assertNotSent($throwable, $callback = null)
     {
@@ -42,8 +39,8 @@ class LaraBugFake extends \LaraBug\LaraBug
     }
 
     /**
-     * @param mixed $throwable
-     * @param callable|null $callback
+     * @param  mixed  $throwable
+     * @param  callable|null  $callback
      */
     public function assertSent($throwable, $callback = null)
     {

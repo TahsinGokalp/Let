@@ -1,17 +1,17 @@
 <?php
 
-namespace LaraBug;
+namespace Let;
 
-use Throwable;
-use LaraBug\Http\Client;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Let\Http\Client;
+use Throwable;
 
-class LaraBug
+class Let
 {
     /** @var Client */
     private $client;
@@ -22,21 +22,17 @@ class LaraBug
     /** @var null|string */
     private $lastExceptionId;
 
-    /**
-     * @param Client $client
-     */
     public function __construct(Client $client)
     {
         $this->client = $client;
 
         $this->blacklist = array_map(function ($blacklist) {
             return strtolower($blacklist);
-        }, config('larabug.blacklist', []));
+        }, config('let.blacklist', []));
     }
 
     /**
-     * @param Throwable $exception
-     * @param string $fileType
+     * @param  string  $fileType
      * @return bool|mixed
      */
     public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
@@ -64,7 +60,7 @@ class LaraBug
             $data['line'] = $customData['line'];
             $data['class'] = null;
 
-            $count = config('larabug.lines_count');
+            $count = config('let.lines_count');
 
             if ($count > 50) {
                 $count = 12;
@@ -78,7 +74,7 @@ class LaraBug
 
                 $index = $currentLine - 1;
 
-                if (!array_key_exists($index, $lines)) {
+                if (! array_key_exists($index, $lines)) {
                     continue;
                 }
 
@@ -93,7 +89,7 @@ class LaraBug
 
         $rawResponse = $this->logError($data);
 
-        if (!$rawResponse) {
+        if (! $rawResponse) {
             return false;
         }
 
@@ -103,7 +99,7 @@ class LaraBug
             $this->setLastExceptionId($response->id);
         }
 
-        if (config('larabug.sleep') !== 0) {
+        if (config('let.sleep') !== 0) {
             $this->addExceptionToSleep($data);
         }
 
@@ -115,20 +111,17 @@ class LaraBug
      */
     public function isSkipEnvironment()
     {
-        if (count(config('larabug.environments')) == 0) {
+        if (count(config('let.environments')) == 0) {
             return true;
         }
 
-        if (in_array(App::environment(), config('larabug.environments'))) {
+        if (in_array(App::environment(), config('let.environments'))) {
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @param string|null $id
-     */
     private function setLastExceptionId(?string $id)
     {
         $this->lastExceptionId = $id;
@@ -136,6 +129,7 @@ class LaraBug
 
     /**
      * Get the last exception id given to us by the larabug API.
+     *
      * @return string|null
      */
     public function getLastExceptionId()
@@ -144,7 +138,6 @@ class LaraBug
     }
 
     /**
-     * @param Throwable $exception
      * @return array
      */
     public function getExceptionData(Throwable $exception)
@@ -160,7 +153,7 @@ class LaraBug
         $data['line'] = $exception->getLine();
         $data['file'] = $exception->getFile();
         $data['class'] = get_class($exception);
-        $data['release'] = config('larabug.release', null);
+        $data['release'] = config('let.release', null);
         $data['storage'] = [
             'SERVER' => [
                 'USER' => Request::server('USER'),
@@ -173,12 +166,12 @@ class LaraBug
             'COOKIE' => $this->filterVariables(Request::cookie()),
             'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
             'HEADERS' => $this->filterVariables(Request::header()),
-            'PARAMETERS' => $this->filterVariables($this->filterParameterValues(Request::all()))
+            'PARAMETERS' => $this->filterVariables($this->filterParameterValues(Request::all())),
         ];
 
         $data['storage'] = array_filter($data['storage']);
 
-        $count = config('larabug.lines_count');
+        $count = config('let.lines_count');
 
         if ($count > 50) {
             $count = 12;
@@ -197,7 +190,7 @@ class LaraBug
         $data['executor'] = array_filter($data['executor']);
 
         // Get project version
-        $data['project_version'] = config('larabug.project_version', null);
+        $data['project_version'] = config('let.project_version', null);
 
         // to make symfony exception more readable
         if ($data['class'] == 'Symfony\Component\Debug\Exception\FatalErrorException') {
@@ -211,7 +204,7 @@ class LaraBug
     }
 
     /**
-     * @param array $parameters
+     * @param  array  $parameters
      * @return array
      */
     public function filterParameterValues($parameters)
@@ -228,7 +221,7 @@ class LaraBug
     /**
      * Determines whether the given parameter value should be filtered.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      * @return bool
      */
     public function shouldParameterValueBeFiltered($value)
@@ -237,7 +230,6 @@ class LaraBug
     }
 
     /**
-     * @param $variables
      * @return array
      */
     public function filterVariables($variables)
@@ -263,9 +255,6 @@ class LaraBug
     /**
      * Gets information from the line.
      *
-     * @param $lines
-     * @param $line
-     * @param $i
      *
      * @return array|void
      */
@@ -275,7 +264,7 @@ class LaraBug
 
         $index = $currentLine - 1;
 
-        if (!array_key_exists($index, $lines)) {
+        if (! array_key_exists($index, $lines)) {
             return;
         }
 
@@ -286,21 +275,19 @@ class LaraBug
     }
 
     /**
-     * @param $exceptionClass
      * @return bool
      */
     public function isSkipException($exceptionClass)
     {
-        return in_array($exceptionClass, config('larabug.except'));
+        return in_array($exceptionClass, config('let.except'));
     }
 
     /**
-     * @param array $data
      * @return bool
      */
     public function isSleepingException(array $data)
     {
-        if (config('larabug.sleep', 0) == 0) {
+        if (config('let.sleep', 0) == 0) {
             return false;
         }
 
@@ -308,16 +295,14 @@ class LaraBug
     }
 
     /**
-     * @param array $data
      * @return string
      */
     private function createExceptionString(array $data)
     {
-        return 'larabug.' . Str::slug($data['host'] . '_' . $data['method'] . '_' . $data['exception'] . '_' . $data['line'] . '_' . $data['file'] . '_' . $data['class']);
+        return 'let.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
     }
 
     /**
-     * @param $exception
      * @return \GuzzleHttp\Promise\PromiseInterface|\Psr\Http\Message\ResponseInterface|null
      */
     private function logError($exception)
@@ -337,8 +322,8 @@ class LaraBug
             /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
             $user = auth()->user();
 
-            if ($user instanceof \LaraBug\Concerns\Larabugable) {
-                return $user->toLarabug();
+            if ($user instanceof \Let\Concerns\Letable) {
+                return $user->toLet();
             }
 
             if ($user instanceof \Illuminate\Database\Eloquent\Model) {
@@ -350,13 +335,12 @@ class LaraBug
     }
 
     /**
-     * @param array $data
      * @return bool
      */
     public function addExceptionToSleep(array $data)
     {
         $exceptionString = $this->createExceptionString($data);
 
-        return Cache::put($exceptionString, $exceptionString, config('larabug.sleep'));
+        return Cache::put($exceptionString, $exceptionString, config('let.sleep'));
     }
 }

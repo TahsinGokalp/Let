@@ -8,11 +8,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | This is your authorization key which you get from your profile.
-    | Retrieve your key from https://www.larabug.com
     |
     */
 
-    'login_key' => env('LB_KEY', ''),
+    'login_key' => env('L_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -20,11 +19,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | This is your project key which you receive when creating a project
-    | Retrieve your key from https://www.larabug.com
     |
     */
 
-    'project_key' => env('LB_PROJECT_KEY', ''),
+    'project_key' => env('L_PROJECT_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,18 +105,8 @@ return [
         '*cvv*',
         '*iban*',
         '*name*',
-        '*email*'
+        '*email*',
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Release git hash
-    |--------------------------------------------------------------------------
-    |
-    |
-    */
-
-    // 'release' => trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD')),
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +117,7 @@ return [
     |
     */
 
-    'server' => env('LB_SERVER', 'https://www.larabug.com/api/log'),
+    'server' => env('L_SERVER', 'https://log.kodrika.com.tr/api/log'),
 
     /*
     |--------------------------------------------------------------------------

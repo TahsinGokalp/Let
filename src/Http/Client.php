@@ -1,6 +1,6 @@
 <?php
 
-namespace LaraBug\Http;
+namespace Let\Http;
 
 use GuzzleHttp\ClientInterface;
 
@@ -15,11 +15,6 @@ class Client
     /** @var string */
     protected $project;
 
-    /**
-     * @param string $login
-     * @param string $project
-     * @param ClientInterface|null $client
-     */
     public function __construct(string $login, string $project, ClientInterface $client = null)
     {
         $this->login = $login;
@@ -28,8 +23,9 @@ class Client
     }
 
     /**
-     * @param array $exception
+     * @param  array  $exception
      * @return \GuzzleHttp\Promise\PromiseInterface|\Psr\Http\Message\ResponseInterface|null
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function report($exception)
@@ -40,13 +36,13 @@ class Client
                     'Authorization' => 'Bearer '.$this->login,
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
-                    'User-Agent' => 'LaraBug-Package'
+                    'User-Agent' => 'Let-Package',
                 ],
                 'json' => array_merge([
                     'project' => $this->project,
                     'additional' => [],
                 ], $exception),
-                'verify' => config('larabug.verify_ssl'),
+                'verify' => config('let.verify_ssl'),
             ]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             return $e->getResponse();
@@ -70,7 +66,6 @@ class Client
     }
 
     /**
-     * @param ClientInterface $client
      * @return $this
      */
     public function setGuzzleHttpClient(ClientInterface $client)

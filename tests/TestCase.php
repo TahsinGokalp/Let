@@ -1,16 +1,14 @@
 <?php
 
-namespace LaraBug\Tests;
+namespace Let\Tests;
 
-use LaraBug\ServiceProvider;
 use Illuminate\Foundation\Application;
+use Let\ServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Setup the test environment.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -18,7 +16,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      * @return array
      */
     protected function getPackageProviders($app)

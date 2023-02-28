@@ -1,62 +1,59 @@
 <?php
 
-namespace LaraBug\Commands;
+namespace Let\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
 {
-    protected $signature = 'larabug:test {exception?}';
+    protected $signature = 'let:test {exception?}';
 
-    protected $description = 'Generate a test exception and send it to larabug';
+    protected $description = 'Generate a test exception and send it to let';
 
     public function handle()
     {
         try {
-            /** @var LaraBug $laraBug */
-            $laraBug = app('larabug');
+            $let = app('let');
 
-            if (config('larabug.login_key')) {
-                $this->info('✓ [Larabug] Found login key');
+            if (config('let.login_key')) {
+                $this->info('✓ [Let] Found login key');
             } else {
-                $this->error('✗ [LaraBug] Could not find your login key, set this in your .env');
+                $this->error('✗ [Let] Could not find your login key, set this in your .env');
             }
 
-            if (config('larabug.project_key')) {
-                $this->info('✓ [Larabug] Found project key');
+            if (config('let.project_key')) {
+                $this->info('✓ [Let] Found project key');
             } else {
-                $this->error('✗ [LaraBug] Could not find your project key, set this in your .env');
-                $this->info('More information on setting your project key: https://www.larabug.com/docs/how-to-use/installation');
+                $this->error('✗ [Let] Could not find your project key, set this in your .env');
             }
 
-            if (in_array(config('app.env'), config('larabug.environments'))) {
-                $this->info('✓ [Larabug] Correct environment found (' . config('app.env') . ')');
+            if (in_array(config('app.env'), config('let.environments'))) {
+                $this->info('✓ [Let] Correct environment found ('.config('app.env').')');
             } else {
-                $this->error('✗ [LaraBug] Environment (' . config('app.env') . ') not allowed to send errors to LaraBug, set this in your config');
-                $this->info('More information about environment configuration: https://www.larabug.com/docs/how-to-use/installation');
+                $this->error('✗ [Let] Environment ('.config('app.env').') not allowed to send errors to Let, set this in your config');
             }
 
-            $response = $laraBug->handle(
+            $response = $let->handle(
                 $this->generateException()
             );
 
             if (isset($response->id)) {
-                $this->info('✓ [LaraBug] Sent exception to LaraBug with ID: '.$response->id);
+                $this->info('✓ [Let] Sent exception to Let with ID: '.$response->id);
             } elseif (is_null($response)) {
-                $this->info('✓ [LaraBug] Sent exception to LaraBug!');
+                $this->info('✓ [Let] Sent exception to Let!');
             } else {
-                $this->error('✗ [LaraBug] Failed to send exception to LaraBug');
+                $this->error('✗ [Let] Failed to send exception to Let');
             }
         } catch (\Exception $ex) {
-            $this->error("✗ [LaraBug] {$ex->getMessage()}");
+            $this->error("✗ [Let] {$ex->getMessage()}");
         }
     }
 
     public function generateException(): ?Exception
     {
         try {
-            throw new Exception($this->argument('exception') ?? 'This is a test exception from the LaraBug console');
+            throw new Exception($this->argument('exception') ?? 'This is a test exception from the Let console');
         } catch (Exception $ex) {
             return $ex;
         }

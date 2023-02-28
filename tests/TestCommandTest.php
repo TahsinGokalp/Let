@@ -1,41 +1,41 @@
 <?php
 
-namespace LaraBug\Tests;
+namespace Let\Tests;
 
-use LaraBug\LaraBug;
-use LaraBug\Tests\Mocks\LaraBugClient;
+use Let\Tests\Mocks\LetClient;
+use TahsinGokalp\Let;
 
 class TestCommandTest extends TestCase
 {
     /** @test */
     public function it_detects_if_the_login_key_is_set()
     {
-        $this->app['config']['larabug.login_key'] = '';
+        $this->app['config']['let.login_key'] = '';
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✗ [LaraBug] Could not find your login key, set this in your .env')
+        $this->artisan('let:test')
+            ->expectsOutput('✗ [let] Could not find your login key, set this in your .env')
             ->assertExitCode(0);
 
-        $this->app['config']['larabug.login_key'] = 'test';
+        $this->app['config']['let.login_key'] = 'test';
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✓ [Larabug] Found login key')
+        $this->artisan('let:test')
+            ->expectsOutput('✓ [let] Found login key')
             ->assertExitCode(0);
     }
 
     /** @test */
     public function it_detects_if_the_project_key_is_set()
     {
-        $this->app['config']['larabug.project_key'] = '';
+        $this->app['config']['let.project_key'] = '';
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✗ [LaraBug] Could not find your project key, set this in your .env')
+        $this->artisan('let:test')
+            ->expectsOutput('✗ [let] Could not find your project key, set this in your .env')
             ->assertExitCode(0);
 
-        $this->app['config']['larabug.project_key'] = 'test';
+        $this->app['config']['let.project_key'] = 'test';
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✓ [Larabug] Found project key')
+        $this->artisan('let:test')
+            ->expectsOutput('✓ [let] Found project key')
             ->assertExitCode(0);
     }
 
@@ -43,38 +43,38 @@ class TestCommandTest extends TestCase
     public function it_detects_that_its_running_in_the_correct_environment()
     {
         $this->app['config']['app.env'] = 'production';
-        $this->app['config']['larabug.environments'] = [];
+        $this->app['config']['let.environments'] = [];
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✗ [LaraBug] Environment (production) not allowed to send errors to LaraBug, set this in your config')
+        $this->artisan('let:test')
+            ->expectsOutput('✗ [let] Environment (production) not allowed to send errors to let, set this in your config')
             ->assertExitCode(0);
 
-        $this->app['config']['larabug.environments'] = ['production'];
+        $this->app['config']['let.environments'] = ['production'];
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✓ [Larabug] Correct environment found (' . config('app.env') . ')')
+        $this->artisan('let:test')
+            ->expectsOutput('✓ [let] Correct environment found ('.config('app.env').')')
             ->assertExitCode(0);
     }
 
     /** @test */
-    public function it_detects_that_it_fails_to_send_to_larabug()
+    public function it_detects_that_it_fails_to_send_to_let()
     {
-        $this->artisan('larabug:test')
-            ->expectsOutput('✗ [LaraBug] Failed to send exception to LaraBug')
+        $this->artisan('let:test')
+            ->expectsOutput('✗ [let] Failed to send exception to let')
             ->assertExitCode(0);
 
-        $this->app['config']['larabug.environments'] = [
+        $this->app['config']['let.environments'] = [
             'testing',
         ];
-        $this->app['larabug'] = new LaraBug($this->client = new LaraBugClient(
+        $this->app['let'] = new Let($this->client = new LetClient(
             'login_key',
             'project_key'
         ));
 
-        $this->artisan('larabug:test')
-            ->expectsOutput('✓ [LaraBug] Sent exception to LaraBug with ID: '.LaraBugClient::RESPONSE_ID)
+        $this->artisan('let:test')
+            ->expectsOutput('✓ [let] Sent exception to let with ID: '.LetClient::RESPONSE_ID)
             ->assertExitCode(0);
 
-        $this->assertEquals(LaraBugClient::RESPONSE_ID, $this->app['larabug']->getLastExceptionId());
+        $this->assertEquals(LetClient::RESPONSE_ID, $this->app['let']->getLastExceptionId());
     }
 }

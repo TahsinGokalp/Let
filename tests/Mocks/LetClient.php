@@ -1,11 +1,11 @@
 <?php
 
-namespace LaraBug\Tests\Mocks;
+namespace Let\Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
 
-class LaraBugClient extends \LaraBug\Http\Client
+class LetClient extends \Let\Http\Client
 {
     const RESPONSE_ID = 'test';
 
@@ -13,7 +13,7 @@ class LaraBugClient extends \LaraBug\Http\Client
     protected $requests = [];
 
     /**
-     * @param array $exception
+     * @param  array  $exception
      */
     public function report($exception)
     {
@@ -22,9 +22,6 @@ class LaraBugClient extends \LaraBug\Http\Client
         return new Response(200, [], json_encode(['id' => self::RESPONSE_ID]));
     }
 
-    /**
-     * @param int $expectedCount
-     */
     public function assertRequestsSent(int $expectedCount)
     {
         Assert::assertCount($expectedCount, $this->requests);

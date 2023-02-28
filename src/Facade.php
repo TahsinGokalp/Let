@@ -1,9 +1,9 @@
 <?php
 
-namespace LaraBug;
+namespace Let;
 
-use LaraBug\Http\Client;
-use LaraBug\Fakes\LaraBugFake;
+use Let\Fakes\LetFake;
+use Let\Http\Client;
 
 /**
  * @method static void assertSent($throwable, $callback = null)
@@ -20,7 +20,7 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     public static function fake()
     {
-        static::swap(new LaraBugFake(new Client('login_key', 'project_key')));
+        static::swap(new LetFake(new Client('login_key', 'project_key')));
     }
 
     /**
@@ -30,6 +30,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'larabug';
+        return 'let';
     }
 }

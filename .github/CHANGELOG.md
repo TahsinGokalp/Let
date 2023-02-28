@@ -1,7 +1,5 @@
 # Changelog
 
-All notable changes to `larabug` will be documented in this file
+## 1.0.0 - 2023-03-01
 
-## 1.3.1 - 2019-10-11
-
-- Cleanups & L6
+- Cleaning

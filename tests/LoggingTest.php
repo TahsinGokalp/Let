@@ -1,6 +1,6 @@
 <?php
 
-namespace LaraBug\Tests;
+namespace Let\Tests;
 
 class LoggingTest extends TestCase
 {
@@ -8,15 +8,15 @@ class LoggingTest extends TestCase
     {
         parent::setUp();
 
-        \LaraBug\Facade::fake();
+        \Let\Facade::fake();
 
-        $this->app['config']['logging.channels.larabug'] = ['driver' => 'larabug'];
-        $this->app['config']['logging.default'] = 'larabug';
-        $this->app['config']['larabug.environments'] = ['testing'];
+        $this->app['config']['logging.channels.let'] = ['driver' => 'let'];
+        $this->app['config']['logging.default'] = 'let';
+        $this->app['config']['let.environments'] = ['testing'];
     }
 
     /** @test */
-    public function it_will_not_send_log_information_to_larabug()
+    public function it_will_not_send_log_information_to_let()
     {
         $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
             \Illuminate\Support\Facades\Log::{$type}('log');
@@ -31,11 +31,11 @@ class LoggingTest extends TestCase
         $this->get('/log-information-via-route/alert');
         $this->get('/log-information-via-route/emergency');
 
-        \LaraBug\Facade::assertRequestsSent(0);
+        \Let\Facade::assertRequestsSent(0);
     }
 
     /** @test */
-    public function it_will_only_send_throwables_to_larabug()
+    public function it_will_only_send_throwables_to_let()
     {
         $this->app['router']->get('/throwables-via-route', function () {
             throw new \Exception('exception-via-route');
@@ -43,6 +43,6 @@ class LoggingTest extends TestCase
 
         $this->get('/throwables-via-route');
 
-        \LaraBug\Facade::assertRequestsSent(1);
+        \Let\Facade::assertRequestsSent(1);
     }
 }

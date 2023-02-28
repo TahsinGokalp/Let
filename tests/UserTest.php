@@ -1,24 +1,24 @@
 <?php
 
-namespace LaraBug\Tests;
+namespace Let\Tests;
 
-use LaraBug\LaraBug;
-use LaraBug\Tests\Mocks\LaraBugClient;
 use Illuminate\Foundation\Auth\User as AuthUser;
+use let\Tests\Mocks\LetClient;
+use TahsinGokalp\Let;
 
 class UserTest extends TestCase
 {
-    /** @var Mocks\LaraBugClient */
+    /** @var Mocks\LetClient */
     protected $client;
 
-    /** @var LaraBug */
-    protected $laraBug;
+    /** @var Let */
+    protected $let;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->laraBug = new LaraBug($this->client = new LaraBugClient(
+        $this->let = new Let($this->client = new LetClient(
             'login_key',
             'project_key'
         ));
@@ -34,26 +34,26 @@ class UserTest extends TestCase
             'email' => 'email',
         ]));
 
-        $this->assertSame(['id' => 1, 'username' => 'username', 'password' => 'password', 'email' => 'email'], $this->laraBug->getUser());
+        $this->assertSame(['id' => 1, 'username' => 'username', 'password' => 'password', 'email' => 'email'], $this->let->getUser());
     }
 
     /** @test */
-    public function it_return_custom_user_with_to_larabug()
+    public function it_return_custom_user_with_to_let()
     {
-        $this->actingAs((new CustomerUserWithToLarabug())->forceFill([
+        $this->actingAs((new CustomerUserWithToLet())->forceFill([
             'id' => 1,
             'username' => 'username',
             'password' => 'password',
             'email' => 'email',
         ]));
 
-        $this->assertSame(['username' => 'username', 'email' => 'email'], $this->laraBug->getUser());
+        $this->assertSame(['username' => 'username', 'email' => 'email'], $this->let->getUser());
     }
 
     /** @test */
     public function it_returns_nothing_for_ghost()
     {
-        $this->assertSame(null, $this->laraBug->getUser());
+        $this->assertSame(null, $this->let->getUser());
     }
 }
 
@@ -62,9 +62,9 @@ class CustomerUser extends AuthUser
     protected $guarded = [];
 }
 
-class CustomerUserWithToLarabug extends CustomerUser implements \LaraBug\Concerns\Larabugable
+class CustomerUserWithToLet extends CustomerUser implements \let\Concerns\Letable
 {
-    public function toLarabug()
+    public function toLet()
     {
         return [
             'username' => $this->username,

@@ -2,4 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::post('javascript-report', 'LaraBugReportController@report');
+Route::post('javascript-report', 'LetReportController@report');

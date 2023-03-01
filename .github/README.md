@@ -1,74 +1,70 @@
-<p align="center">
-    <a href="https://www.larabug.com" target="_blank"><img width="130" src="https://www.larabug.com/images/larabug-logo-small.png"></a>
-</p>
+# Let
+Laravel 6.x/7.x/8.x/9.x/10.x package for logging errors to [Let-Tracker](https://github.com/TahsinGokalp/let-tracker)
 
-# LaraBug
-Laravel 6.x/7.x/8.x/9.x package for logging errors to [larabug.com](https://www.larabug.com)
-
-[![Software License](https://poser.pugx.org/larabug/larabug/license.svg)](LICENSE.md)
-[![Latest Version on Packagist](https://poser.pugx.org/larabug/larabug/v/stable.svg)](https://packagist.org/packages/larabug/larabug)
-[![Build Status](https://github.com/larabug/larabug/workflows/tests/badge.svg)](https://github.com/larabug/larabug/actions)
-[![Total Downloads](https://poser.pugx.org/larabug/larabug/d/total.svg)](https://packagist.org/packages/larabug/larabug)
+[![Software License](https://poser.pugx.org/tahsingokalp/let/license.svg)](LICENSE.md)
+[![Latest Version on Packagist](https://poser.pugx.org/tahsingokalp/let/v/stable.svg)](https://packagist.org/packages/tahsingokalp/let)
+[![Build Status](https://github.com/tahsingokalp/let/workflows/tests/badge.svg)](https://github.com/tahsingokalp/let/actions)
+[![Total Downloads](https://poser.pugx.org/tahsingokalp/let/d/total.svg)](https://packagist.org/packages/tahsingokalp/let)
 
 ## Installation on laravel
 You can install the package through Composer.
 ```bash
-composer require larabug/larabug
+composer require tahsingokalp/let
 ```
 
 Then publish the config and migration file of the package using the vendor publish command.
 ```bash
-php artisan vendor:publish --provider="LaraBug\ServiceProvider"
+php artisan vendor:publish --provider="Let\ServiceProvider"
 ```
-And adjust config file (`config/larabug.php`) with your desired settings.
+And adjust config file (`config/let.php`) with your desired settings.
 
-Note: by default only production environments will report errors. To modify this edit your LaraBug configuration.
+Note: by default only production environments will report errors. To modify this edit your Let configuration.
 
 ## Installation on lumen
 You can install the package through Composer.
 ```bash
-composer require larabug/larabug
+composer require tahsingokalp/let
 ```
 
-Copy the config file (`larabug.php`) to lumen config directory.
+Copy the config file (`let.php`) to lumen config directory.
 ```bash
-php -r "file_exists('config/') || mkdir('config/'); copy('vendor/larabug/larabug/config/larabug.php', 'config/larabug.php');"
+php -r "file_exists('config/') || mkdir('config/'); copy('vendor/tahsingokalp/let/config/larletabug.php', 'config/let.php');"
 ```
-And adjust config file (`config/larabug.php`) with your desired settings.
+And adjust config file (`config/let.php`) with your desired settings.
 
 In `bootstrap/app.php` you will need to:
 - Uncomment this line:
     ```php
     $app->withFacades();
     ```
-- Register the larabug config file:
+- Register the let config file:
     ```php
-    $app->configure('larabug');
+    $app->configure('let');
     ```
-- Register larabug service provider:
+- Register let service provider:
     ```php
-    $app->register(LaraBug\ServiceProvider::class);
+    $app->register(Let\ServiceProvider::class);
     ```
 
 ## Configuration variables
 All that is left to do is to define two env configuration variables.
 ```
-LB_KEY=
-LB_PROJECT_KEY=
+L_KEY=
+L_PROJECT_KEY=
 ```
-`LB_KEY` is your profile key which authorises your account to the API.
+`L_KEY` is your profile key which authorises your account to the API.
 
-`LB_PROJECT_KEY` is your project API key which you've received when creating a project.
+`L_PROJECT_KEY` is your project API key which you've received when creating a project.
 
-Get the variables at [larabug.com](https://www.larabug.com)
+Install let-tracker to your host and get the variables
 
 ## Reporting unhandled exceptions
-You can use LaraBug as a log-channel by adding the following config to the `channels` section in `config/logging.php`:
+You can use Let as a log-channel by adding the following config to the `channels` section in `config/logging.php`:
 ```php
 'channels' => [
     // ...
-    'larabug' => [
-        'driver' => 'larabug',
+    'let' => [
+        'driver' => 'let',
     ],
 ],
 ```
@@ -77,7 +73,7 @@ After that you can add it to the stack section:
 'channels' => [
     'stack' => [
         'driver' => 'stack',
-        'channels' => ['single', 'larabug'],
+        'channels' => ['single', 'let'],
     ],
     //...
 ],
@@ -90,4 +86,8 @@ php -r "file_exists('config/') || mkdir('config/'); copy('vendor/laravel/lumen-f
 ```
 
 ## License
-The LaraBug package is open source software licensed under the [license MIT](http://opensource.org/licenses/MIT)
+The Let package is open source software licensed under the [license MIT](http://opensource.org/licenses/MIT)
+
+## Special Thanks
+
+This repo forked from https://github.com/LaraBug/LaraBug - https://github.com/Cannonb4ll

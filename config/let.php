@@ -110,6 +110,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Release git hash
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    // 'release' => trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD')),
+
+    /*
+    |--------------------------------------------------------------------------
     | Server setting
     |--------------------------------------------------------------------------
     |
@@ -128,6 +138,6 @@ return [
     | Never turn SSL verification off on production instances
     |
     */
-    'verify_ssl' => env('LB_VERIFY_SSL', true),
+    'verify_ssl' => env('L_VERIFY_SSL', true),
 
 ];

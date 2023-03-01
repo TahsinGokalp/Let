@@ -10,7 +10,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="LaraBug Test Suite">
+        <testsuite name="Let Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

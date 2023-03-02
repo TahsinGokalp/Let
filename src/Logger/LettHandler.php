@@ -1,22 +1,23 @@
 <?php
 
-namespace Let\Logger;
+namespace LettLogger;
 
+use Lett\Lett;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Level;
 use Monolog\Logger;
-use TahsinGokalp\Let;
 use Throwable;
 
-class LetHandler extends AbstractProcessingHandler
+class LettHandler extends AbstractProcessingHandler
 {
-    protected $let;
+    protected Lett $lett;
 
     /**
      * @param  int  $level
      */
-    public function __construct(Let $let, $level = Logger::ERROR, bool $bubble = true)
+    public function __construct(Lett $lett, $level = Level::Error, bool $bubble = true)
     {
-        $this->let = $let;
+        $this->lett = $lett;
 
         parent::__construct($level, $bubble);
     }
@@ -27,7 +28,7 @@ class LetHandler extends AbstractProcessingHandler
     protected function write($record): void
     {
         if (isset($record['context']['exception']) && $record['context']['exception'] instanceof Throwable) {
-            $this->let->handle(
+            $this->lett->handle(
                 $record['context']['exception']
             );
 

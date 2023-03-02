@@ -1,9 +1,9 @@
 <?php
 
-namespace Let\Tests;
+namespace Lett\Tests;
 
 use Illuminate\Foundation\Application;
-use Let\ServiceProvider;
+use Lett\ServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -19,7 +19,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
      * @param  Application  $app
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [ServiceProvider::class];
     }

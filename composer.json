@@ -1,6 +1,6 @@
 {
-    "name": "tahsingokalp/let",
-    "description": "Laravel 6.x/7.x/8.x/9.x/10.x error notifier",
+    "name": "tahsingokalp/lett",
+    "description": "Error notifier for Laravel 6.x/7.x/8.x/9.x/10.x",
     "keywords": [
         "laravel",
         "log",
@@ -9,7 +9,8 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "guzzlehttp/guzzle": "^6.0.2 || ^7.0",
-        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0"
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
@@ -21,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Let\\": "src/"
+            "Lett\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Let\\Tests\\": "tests"
+            "Lett\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -38,7 +39,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Let\\ServiceProvider"
+                "Lett\\ServiceProvider"
             ]
         }
     },

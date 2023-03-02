@@ -1,21 +1,21 @@
 <?php
 
-namespace Let\Tests\Fakes;
+namespace Lett\Tests\Fakes;
 
-use LaraBug\Tests\TestCase;
-use Let\Facade as LetFacade;
+use Lett\Facade as LettFacade;
+use Lett\Tests\TestCase;
 
-class LetFakeTest extends TestCase
+class LettFakeTest extends TestCase
 {
     public function setUp(): void
     {
         parent::setUp();
 
-        LetFacade::fake();
+        LettFacade::fake();
 
-        $this->app['config']['logging.channels.let'] = ['driver' => 'let'];
-        $this->app['config']['logging.default'] = 'let';
-        $this->app['config']['let.environments'] = ['testing'];
+        $this->app['config']['logging.channels.lett'] = ['driver' => 'lett'];
+        $this->app['config']['logging.default'] = 'lett';
+        $this->app['config']['lett.environments'] = ['testing'];
     }
 
     /** @test */
@@ -27,21 +27,21 @@ class LetFakeTest extends TestCase
 
         $this->get('/exception');
 
-        LetFacade::assertSent(\Exception::class);
+        LettFacade::assertSent(\Exception::class);
 
-        LetFacade::assertSent(\Exception::class, function (\Throwable $throwable) {
+        LettFacade::assertSent(\Exception::class, function (\Throwable $throwable) {
             $this->assertSame('Exception', $throwable->getMessage());
 
             return true;
         });
 
-        LetFacade::assertNotSent(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        LettFacade::assertNotSent(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
     }
 
     /** @test */
     public function it_will_sent_nothing_to_let_if_no_exceptions_thrown()
     {
-        LetFacade::fake();
+        LettFacade::fake();
 
         $this->app['router']->get('/nothing', function () {
             //
@@ -49,6 +49,6 @@ class LetFakeTest extends TestCase
 
         $this->get('/nothing');
 
-        LetFacade::assertNothingSent();
+        LettFacade::assertNothingSent();
     }
 }

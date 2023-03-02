@@ -1,41 +1,45 @@
 <?php
 
-namespace Let;
+namespace Lett;
 
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Let\Http\Client;
+use Lett\Http\Client;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class Let
+class Lett
 {
     /** @var Client */
-    private $client;
+    private Client $client;
 
     /** @var array */
-    private $blacklist = [];
+    private array $blacklist = [];
 
     /** @var null|string */
-    private $lastExceptionId;
+    private ?string $lastExceptionId;
 
     public function __construct(Client $client)
     {
         $this->client = $client;
 
-        $this->blacklist = array_map(function ($blacklist) {
+        $this->blacklist = array_map(static function ($blacklist) {
             return strtolower($blacklist);
-        }, config('let.blacklist', []));
+        }, config('lett.blacklist', []));
     }
 
     /**
-     * @param  string  $fileType
+     * @param string $fileType
      * @return bool|mixed
      */
-    public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
+    public function handle(Throwable $exception, string $fileType = 'php', array $customData = [])
     {
         if ($this->isSkipEnvironment()) {
             return false;
@@ -51,7 +55,7 @@ class Let
             return false;
         }
 
-        if ($fileType == 'javascript') {
+        if ((string)$fileType === 'javascript') {
             $data['fullUrl'] = $customData['url'];
             $data['file'] = $customData['file'];
             $data['file_type'] = $fileType;
@@ -60,7 +64,7 @@ class Let
             $data['line'] = $customData['line'];
             $data['class'] = null;
 
-            $count = config('let.lines_count');
+            $count = config('lett.lines_count');
 
             if ($count > 50) {
                 $count = 12;
@@ -93,13 +97,17 @@ class Let
             return false;
         }
 
-        $response = json_decode($rawResponse->getBody()->getContents());
+        try {
+            $response = json_decode($rawResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return false;
+        }
 
         if (isset($response->id)) {
             $this->setLastExceptionId($response->id);
         }
 
-        if (config('let.sleep') !== 0) {
+        if (config('lett.sleep') !== 0) {
             $this->addExceptionToSleep($data);
         }
 
@@ -109,30 +117,30 @@ class Let
     /**
      * @return bool
      */
-    public function isSkipEnvironment()
+    public function isSkipEnvironment(): bool
     {
-        if (count(config('let.environments')) == 0) {
+        if (count(config('lett.environments')) === 0) {
             return true;
         }
 
-        if (in_array(App::environment(), config('let.environments'))) {
+        if (in_array(App::environment(), config('lett.environments'))) {
             return false;
         }
 
         return true;
     }
 
-    private function setLastExceptionId(?string $id)
+    private function setLastExceptionId(?string $id): void
     {
         $this->lastExceptionId = $id;
     }
 
     /**
-     * Get the last exception id given to us by the larabug API.
+     * Get the last exception id given to us by the lett API.
      *
      * @return string|null
      */
-    public function getLastExceptionId()
+    public function getLastExceptionId(): ?string
     {
         return $this->lastExceptionId;
     }
@@ -140,7 +148,7 @@ class Let
     /**
      * @return array
      */
-    public function getExceptionData(Throwable $exception)
+    public function getExceptionData(Throwable $exception): array
     {
         $data = [];
 
@@ -153,7 +161,7 @@ class Let
         $data['line'] = $exception->getLine();
         $data['file'] = $exception->getFile();
         $data['class'] = get_class($exception);
-        $data['release'] = config('let.release', null);
+        $data['release'] = config('lett.release', null);
         $data['storage'] = [
             'SERVER' => [
                 'USER' => Request::server('USER'),
@@ -171,7 +179,7 @@ class Let
 
         $data['storage'] = array_filter($data['storage']);
 
-        $count = config('let.lines_count');
+        $count = config('lett.lines_count');
 
         if ($count > 50) {
             $count = 12;
@@ -190,7 +198,7 @@ class Let
         $data['executor'] = array_filter($data['executor']);
 
         // Get project version
-        $data['project_version'] = config('let.project_version', null);
+        $data['project_version'] = config('lett.project_version', null);
 
         // to make symfony exception more readable
         if ($data['class'] == 'Symfony\Component\Debug\Exception\FatalErrorException') {
@@ -204,10 +212,10 @@ class Let
     }
 
     /**
-     * @param  array  $parameters
+     * @param array $parameters
      * @return array
      */
-    public function filterParameterValues($parameters)
+    public function filterParameterValues(array $parameters): array
     {
         return collect($parameters)->map(function ($value) {
             if ($this->shouldParameterValueBeFiltered($value)) {
@@ -224,7 +232,7 @@ class Let
      * @param  mixed  $value
      * @return bool
      */
-    public function shouldParameterValueBeFiltered($value)
+    public function shouldParameterValueBeFiltered($value): bool
     {
         return $value instanceof UploadedFile;
     }
@@ -232,7 +240,7 @@ class Let
     /**
      * @return array
      */
-    public function filterVariables($variables)
+    public function filterVariables($variables): array
     {
         if (is_array($variables)) {
             array_walk($variables, function ($val, $key) use (&$variables) {
@@ -277,17 +285,17 @@ class Let
     /**
      * @return bool
      */
-    public function isSkipException($exceptionClass)
+    public function isSkipException($exceptionClass): bool
     {
-        return in_array($exceptionClass, config('let.except'));
+        return in_array($exceptionClass, config('lett.except'));
     }
 
     /**
      * @return bool
      */
-    public function isSleepingException(array $data)
+    public function isSleepingException(array $data): bool
     {
-        if (config('let.sleep', 0) == 0) {
+        if ((int)config('lett.sleep', 0) === 0) {
             return false;
         }
 
@@ -297,13 +305,14 @@ class Let
     /**
      * @return string
      */
-    private function createExceptionString(array $data)
+    private function createExceptionString(array $data): string
     {
-        return 'let.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
+        return 'lett.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
     }
 
     /**
-     * @return \GuzzleHttp\Promise\PromiseInterface|\Psr\Http\Message\ResponseInterface|null
+     * @return PromiseInterface|ResponseInterface|null
+     * @throws GuzzleException
      */
     private function logError($exception)
     {
@@ -316,14 +325,14 @@ class Let
     /**
      * @return array|null
      */
-    public function getUser()
+    public function getUser(): ?array
     {
         if (function_exists('auth') && (app() instanceof \Illuminate\Foundation\Application && auth()->check())) {
-            /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
+            /** @var Authenticatable $user */
             $user = auth()->user();
 
-            if ($user instanceof \Let\Concerns\Letable) {
-                return $user->toLet();
+            if ($user instanceof \Lett\Concerns\Lettable) {
+                return $user->toLett();
             }
 
             if ($user instanceof \Illuminate\Database\Eloquent\Model) {
@@ -337,10 +346,10 @@ class Let
     /**
      * @return bool
      */
-    public function addExceptionToSleep(array $data)
+    public function addExceptionToSleep(array $data): bool
     {
         $exceptionString = $this->createExceptionString($data);
 
-        return Cache::put($exceptionString, $exceptionString, config('let.sleep'));
+        return Cache::put($exceptionString, $exceptionString, config('lett.sleep'));
     }
 }

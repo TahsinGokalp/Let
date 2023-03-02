@@ -1,41 +1,41 @@
 <?php
 
-namespace Let\Tests;
+namespace Letty\Tests;
 
-use Let\Tests\Mocks\LetClient;
-use TahsinGokalp\Let;
+use Lett\Tests\Mocks\LettClient;
+use TahsinGokalp\Lett;
 
 class TestCommandTest extends TestCase
 {
     /** @test */
     public function it_detects_if_the_login_key_is_set()
     {
-        $this->app['config']['let.login_key'] = '';
+        $this->app['config']['lett.login_key'] = '';
 
-        $this->artisan('let:test')
-            ->expectsOutput('✗ [let] Could not find your login key, set this in your .env')
+        $this->artisan('lett:test')
+            ->expectsOutput('✗ [Lett] Could not find your login key, set this in your .env')
             ->assertExitCode(0);
 
-        $this->app['config']['let.login_key'] = 'test';
+        $this->app['config']['lett.login_key'] = 'test';
 
-        $this->artisan('let:test')
-            ->expectsOutput('✓ [let] Found login key')
+        $this->artisan('lett:test')
+            ->expectsOutput('✓ [Lett] Found login key')
             ->assertExitCode(0);
     }
 
     /** @test */
     public function it_detects_if_the_project_key_is_set()
     {
-        $this->app['config']['let.project_key'] = '';
+        $this->app['config']['lett.project_key'] = '';
 
-        $this->artisan('let:test')
-            ->expectsOutput('✗ [let] Could not find your project key, set this in your .env')
+        $this->artisan('lett:test')
+            ->expectsOutput('✗ [Lett] Could not find your project key, set this in your .env')
             ->assertExitCode(0);
 
-        $this->app['config']['let.project_key'] = 'test';
+        $this->app['config']['lett.project_key'] = 'test';
 
-        $this->artisan('let:test')
-            ->expectsOutput('✓ [let] Found project key')
+        $this->artisan('lett:test')
+            ->expectsOutput('✓ [Lett] Found project key')
             ->assertExitCode(0);
     }
 
@@ -43,38 +43,38 @@ class TestCommandTest extends TestCase
     public function it_detects_that_its_running_in_the_correct_environment()
     {
         $this->app['config']['app.env'] = 'production';
-        $this->app['config']['let.environments'] = [];
+        $this->app['config']['lett.environments'] = [];
 
-        $this->artisan('let:test')
-            ->expectsOutput('✗ [let] Environment (production) not allowed to send errors to let, set this in your config')
+        $this->artisan('lett:test')
+            ->expectsOutput('✗ [Lett] Environment (production) not allowed to send errors to let, set this in your config')
             ->assertExitCode(0);
 
-        $this->app['config']['let.environments'] = ['production'];
+        $this->app['config']['lett.environments'] = ['production'];
 
-        $this->artisan('let:test')
-            ->expectsOutput('✓ [let] Correct environment found ('.config('app.env').')')
+        $this->artisan('lett:test')
+            ->expectsOutput('✓ [Lett] Correct environment found ('.config('app.env').')')
             ->assertExitCode(0);
     }
 
     /** @test */
-    public function it_detects_that_it_fails_to_send_to_let()
+    public function it_detects_that_it_fails_to_send_to_lett()
     {
-        $this->artisan('let:test')
-            ->expectsOutput('✗ [let] Failed to send exception to let')
+        $this->artisan('lett:test')
+            ->expectsOutput('✗ [Lett] Failed to send exception to lett')
             ->assertExitCode(0);
 
-        $this->app['config']['let.environments'] = [
+        $this->app['config']['lett.environments'] = [
             'testing',
         ];
-        $this->app['let'] = new Let($this->client = new LetClient(
+        $this->app['lett'] = new Lett($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
 
-        $this->artisan('let:test')
-            ->expectsOutput('✓ [let] Sent exception to let with ID: '.LetClient::RESPONSE_ID)
+        $this->artisan('lett:test')
+            ->expectsOutput('✓ [Lett] Sent exception to lett with ID: '.LettClient::RESPONSE_ID)
             ->assertExitCode(0);
 
-        $this->assertEquals(LetClient::RESPONSE_ID, $this->app['let']->getLastExceptionId());
+        $this->assertEquals(LettClient::RESPONSE_ID, $this->app['lett']->getLastExceptionId());
     }
 }

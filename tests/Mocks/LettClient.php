@@ -1,11 +1,11 @@
 <?php
 
-namespace Let\Tests\Mocks;
+namespace Lett\Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
 
-class LetClient extends \Let\Http\Client
+class LettClient extends \Lett\Http\Client
 {
     const RESPONSE_ID = 'test';
 

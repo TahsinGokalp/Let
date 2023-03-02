@@ -1,29 +1,29 @@
 <?php
 
-namespace Let\Tests;
+namespace Lett\Tests;
 
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Let\Tests\Mocks\LetClient;
+use Lett\Tests\Mocks\LettClient;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TahsinGokalp\Let;
+use TahsinGokalp\Lett;
 
-class LetTest extends TestCase
+class LettTest extends TestCase
 {
-    /** @var Let */
-    protected $let;
+    /** @var Lett */
+    protected $lett;
 
-    /** @var Mocks\LetClient */
+    /** @var Mocks\LettClient */
     protected $client;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->let = new Let($this->client = new LetClient(
+        $this->lett = new Lett($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
@@ -32,13 +32,13 @@ class LetTest extends TestCase
     /** @test */
     public function is_will_not_crash_if_let_returns_error_bad_response_exception()
     {
-        $this->let = new Let($this->client = new \Let\Http\Client(
+        $this->lett = new Lett($this->client = new \Lett\Http\Client(
             'login_key',
             'project_key'
         ));
 
         //
-        $this->app['config']['let.environments'] = ['testing'];
+        $this->app['config']['lett.environments'] = ['testing'];
 
         $this->client->setGuzzleHttpClient(new Client([
             'handler' => MockHandler::createWithMiddleware([
@@ -46,13 +46,13 @@ class LetTest extends TestCase
             ]),
         ]));
 
-        $this->assertInstanceOf(get_class(new \stdClass()), $this->let->handle(new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')));
+        $this->assertInstanceOf(get_class(new \stdClass()), $this->lett->handle(new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')));
     }
 
     /** @test */
     public function is_will_not_crash_if_let_returns_normal_exception()
     {
-        $this->let = new Let($this->client = new \Let\Http\Client(
+        $this->lett = new Lett($this->client = new \Lett\Http\Client(
             'login_key',
             'project_key'
         ));
@@ -66,75 +66,75 @@ class LetTest extends TestCase
             ]),
         ]));
 
-        $this->assertFalse($this->let->handle(new Exception('is_will_not_crash_if_let_returns_normal_exception')));
+        $this->assertFalse($this->lett->handle(new Exception('is_will_not_crash_if_let_returns_normal_exception')));
     }
 
     /** @test */
     public function it_can_skip_exceptions_based_on_class()
     {
-        $this->app['config']['let.except'] = [];
+        $this->app['config']['lett.except'] = [];
 
-        $this->assertFalse($this->let->isSkipException(NotFoundHttpException::class));
+        $this->assertFalse($this->lett->isSkipException(NotFoundHttpException::class));
 
-        $this->app['config']['let.except'] = [
+        $this->app['config']['lett.except'] = [
             NotFoundHttpException::class,
         ];
 
-        $this->assertTrue($this->let->isSkipException(NotFoundHttpException::class));
+        $this->assertTrue($this->lett->isSkipException(NotFoundHttpException::class));
     }
 
     /** @test */
     public function it_can_skip_exceptions_based_on_environment()
     {
-        $this->app['config']['let.environments'] = [];
+        $this->app['config']['lett.environments'] = [];
 
-        $this->assertTrue($this->let->isSkipEnvironment());
+        $this->assertTrue($this->lett->isSkipEnvironment());
 
-        $this->app['config']['let.environments'] = ['production'];
+        $this->app['config']['lett.environments'] = ['production'];
 
-        $this->assertTrue($this->let->isSkipEnvironment());
+        $this->assertTrue($this->lett->isSkipEnvironment());
 
-        $this->app['config']['let.environments'] = ['testing'];
+        $this->app['config']['lett.environments'] = ['testing'];
 
-        $this->assertFalse($this->let->isSkipEnvironment());
+        $this->assertFalse($this->lett->isSkipEnvironment());
     }
 
     /** @test */
     public function it_will_return_false_for_sleeping_cache_exception_if_disabled()
     {
-        $this->app['config']['let.sleep'] = 0;
+        $this->app['config']['lett.sleep'] = 0;
 
-        $this->assertFalse($this->let->isSleepingException([]));
+        $this->assertFalse($this->lett->isSleepingException([]));
     }
 
     /** @test */
     public function it_can_check_if_is_a_sleeping_cache_exception()
     {
-        $data = ['host' => 'localhost', 'method' => 'GET', 'exception' => 'it_can_check_if_is_a_sleeping_cache_exception', 'line' => 2, 'file' => '/tmp/let/tests/letTest.php', 'class' => 'Exception'];
+        $data = ['host' => 'localhost', 'method' => 'GET', 'exception' => 'it_can_check_if_is_a_sleeping_cache_exception', 'line' => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception'];
 
         Carbon::setTestNow('2019-10-12 13:30:00');
 
-        $this->assertFalse($this->let->isSleepingException($data));
+        $this->assertFalse($this->lett->isSleepingException($data));
 
         Carbon::setTestNow('2019-10-12 13:30:00');
 
-        $this->let->addExceptionToSleep($data);
+        $this->lett->addExceptionToSleep($data);
 
-        $this->assertTrue($this->let->isSleepingException($data));
+        $this->assertTrue($this->lett->isSleepingException($data));
 
         Carbon::setTestNow('2019-10-12 13:31:00');
 
-        $this->assertTrue($this->let->isSleepingException($data));
+        $this->assertTrue($this->lett->isSleepingException($data));
 
         Carbon::setTestNow('2019-10-12 13:31:01');
 
-        $this->assertFalse($this->let->isSleepingException($data));
+        $this->assertFalse($this->lett->isSleepingException($data));
     }
 
     /** @test */
     public function it_can_get_formatted_exception_data()
     {
-        $data = $this->let->getExceptionData(new Exception(
+        $data = $this->lett->getExceptionData(new Exception(
             'it_can_get_formatted_exception_data'
         ));
 
@@ -150,7 +150,7 @@ class LetTest extends TestCase
     /** @test */
     public function it_filters_the_data_based_on_the_configuration()
     {
-        $this->assertContains('*password*', $this->app['config']['let.blacklist']);
+        $this->assertContains('*password*', $this->app['config']['lett.blacklist']);
 
         $data = [
             'password' => 'testing',
@@ -166,15 +166,15 @@ class LetTest extends TestCase
             'Password' => 'testing',
         ];
 
-        $this->assertContains('***', $this->let->filterVariables($data));
+        $this->assertContains('***', $this->lett->filterVariables($data));
     }
 
     /** @test */
-    public function it_can_report_an_exception_to_let()
+    public function it_can_report_an_exception_to_lett()
     {
-        $this->app['config']['let.environments'] = ['testing'];
+        $this->app['config']['lett.environments'] = ['testing'];
 
-        $this->let->handle(new Exception('it_can_report_an_exception_to_let'));
+        $this->let->handle(new Exception('it_can_report_an_exception_to_lett'));
 
         $this->client->assertRequestsSent(1);
     }

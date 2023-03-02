@@ -1,6 +1,6 @@
 <?php
 
-namespace Let;
+namespace Lett;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Let\Http\Client;
+use Lett\Http\Client;
 use Throwable;
 
-class Let
+class Lett
 {
     /** @var Client */
     private $client;
@@ -28,7 +28,7 @@ class Let
 
         $this->blacklist = array_map(function ($blacklist) {
             return strtolower($blacklist);
-        }, config('let.blacklist', []));
+        }, config('lett.blacklist', []));
     }
 
     /**
@@ -60,7 +60,7 @@ class Let
             $data['line'] = $customData['line'];
             $data['class'] = null;
 
-            $count = config('let.lines_count');
+            $count = config('lett.lines_count');
 
             if ($count > 50) {
                 $count = 12;
@@ -99,7 +99,7 @@ class Let
             $this->setLastExceptionId($response->id);
         }
 
-        if (config('let.sleep') !== 0) {
+        if (config('lett.sleep') !== 0) {
             $this->addExceptionToSleep($data);
         }
 
@@ -111,11 +111,11 @@ class Let
      */
     public function isSkipEnvironment()
     {
-        if (count(config('let.environments')) == 0) {
+        if (count(config('lett.environments')) == 0) {
             return true;
         }
 
-        if (in_array(App::environment(), config('let.environments'))) {
+        if (in_array(App::environment(), config('lett.environments'))) {
             return false;
         }
 
@@ -153,7 +153,7 @@ class Let
         $data['line'] = $exception->getLine();
         $data['file'] = $exception->getFile();
         $data['class'] = get_class($exception);
-        $data['release'] = config('let.release', null);
+        $data['release'] = config('lett.release', null);
         $data['storage'] = [
             'SERVER' => [
                 'USER' => Request::server('USER'),
@@ -171,7 +171,7 @@ class Let
 
         $data['storage'] = array_filter($data['storage']);
 
-        $count = config('let.lines_count');
+        $count = config('lett.lines_count');
 
         if ($count > 50) {
             $count = 12;
@@ -190,7 +190,7 @@ class Let
         $data['executor'] = array_filter($data['executor']);
 
         // Get project version
-        $data['project_version'] = config('let.project_version', null);
+        $data['project_version'] = config('lett.project_version', null);
 
         // to make symfony exception more readable
         if ($data['class'] == 'Symfony\Component\Debug\Exception\FatalErrorException') {
@@ -279,7 +279,7 @@ class Let
      */
     public function isSkipException($exceptionClass)
     {
-        return in_array($exceptionClass, config('let.except'));
+        return in_array($exceptionClass, config('lett.except'));
     }
 
     /**
@@ -287,7 +287,7 @@ class Let
      */
     public function isSleepingException(array $data)
     {
-        if (config('let.sleep', 0) == 0) {
+        if (config('lett.sleep', 0) == 0) {
             return false;
         }
 
@@ -299,7 +299,7 @@ class Let
      */
     private function createExceptionString(array $data)
     {
-        return 'let.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
+        return 'lett.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
     }
 
     /**
@@ -322,7 +322,7 @@ class Let
             /** @var \Illuminate\Contracts\Auth\Authenticatable $user */
             $user = auth()->user();
 
-            if ($user instanceof \Let\Concerns\Letable) {
+            if ($user instanceof \Lett\Concerns\Lettable) {
                 return $user->toLet();
             }
 
@@ -341,6 +341,6 @@ class Let
     {
         $exceptionString = $this->createExceptionString($data);
 
-        return Cache::put($exceptionString, $exceptionString, config('let.sleep'));
+        return Cache::put($exceptionString, $exceptionString, config('lett.sleep'));
     }
 }

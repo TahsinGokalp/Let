@@ -1,6 +1,6 @@
 <?php
 
-namespace Let\Tests;
+namespace Lett\Tests;
 
 class LoggingTest extends TestCase
 {
@@ -8,15 +8,15 @@ class LoggingTest extends TestCase
     {
         parent::setUp();
 
-        \Let\Facade::fake();
+        \Lett\Facade::fake();
 
-        $this->app['config']['logging.channels.let'] = ['driver' => 'let'];
-        $this->app['config']['logging.default'] = 'let';
-        $this->app['config']['let.environments'] = ['testing'];
+        $this->app['config']['logging.channels.lett'] = ['driver' => 'lett'];
+        $this->app['config']['logging.default'] = 'lett';
+        $this->app['config']['lett.environments'] = ['testing'];
     }
 
     /** @test */
-    public function it_will_not_send_log_information_to_let()
+    public function it_will_not_send_log_information_to_lett()
     {
         $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
             \Illuminate\Support\Facades\Log::{$type}('log');
@@ -31,11 +31,11 @@ class LoggingTest extends TestCase
         $this->get('/log-information-via-route/alert');
         $this->get('/log-information-via-route/emergency');
 
-        \Let\Facade::assertRequestsSent(0);
+        \Lett\Facade::assertRequestsSent(0);
     }
 
     /** @test */
-    public function it_will_only_send_throwables_to_let()
+    public function it_will_only_send_throwables_to_lett()
     {
         $this->app['router']->get('/throwables-via-route', function () {
             throw new \Exception('exception-via-route');
@@ -43,6 +43,6 @@ class LoggingTest extends TestCase
 
         $this->get('/throwables-via-route');
 
-        \Let\Facade::assertRequestsSent(1);
+        \Lett\Facade::assertRequestsSent(1);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Let\Tests;
+namespace Lett\Tests;
 
 use Illuminate\Foundation\Application;
-use Let\ServiceProvider;
+use Lett\ServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

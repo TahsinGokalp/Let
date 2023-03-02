@@ -1,6 +1,6 @@
 <?php
 
-namespace Let\Http;
+namespace Lett\Http;
 
 use GuzzleHttp\ClientInterface;
 
@@ -31,7 +31,7 @@ class Client
     public function report($exception)
     {
         try {
-            return $this->getGuzzleHttpClient()->request('POST', config('larabug.server'), [
+            return $this->getGuzzleHttpClient()->request('POST', config('lett.server'), [
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->login,
                     'Content-Type' => 'application/json',
@@ -42,7 +42,7 @@ class Client
                     'project' => $this->project,
                     'additional' => [],
                 ], $exception),
-                'verify' => config('let.verify_ssl'),
+                'verify' => config('lett.verify_ssl'),
             ]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             return $e->getResponse();

@@ -1,10 +1,10 @@
 <?php
 
-namespace LaraBug\Fakes;
+namespace Lett\Fakes;
 
 use PHPUnit\Framework\Assert as PHPUnit;
 
-class LetFake extends \TahsinGokalp\Let
+class LettFake extends \TahsinGokalp\Lett
 {
     /** @var array */
     public $exceptions = [];

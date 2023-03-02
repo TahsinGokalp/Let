@@ -1,37 +1,37 @@
 <?php
 
-namespace Let\Commands;
+namespace Lett\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
 {
-    protected $signature = 'let:test {exception?}';
+    protected $signature = 'lett:test {exception?}';
 
-    protected $description = 'Generate a test exception and send it to let';
+    protected $description = 'Generate a test exception and send it to lett';
 
     public function handle()
     {
         try {
-            $let = app('let');
+            $let = app('lett');
 
-            if (config('let.login_key')) {
-                $this->info('✓ [Let] Found login key');
+            if (config('lett.login_key')) {
+                $this->info('✓ [Lett] Found login key');
             } else {
-                $this->error('✗ [Let] Could not find your login key, set this in your .env');
+                $this->error('✗ [Lett] Could not find your login key, set this in your .env');
             }
 
-            if (config('let.project_key')) {
-                $this->info('✓ [Let] Found project key');
+            if (config('lett.project_key')) {
+                $this->info('✓ [Lett] Found project key');
             } else {
-                $this->error('✗ [Let] Could not find your project key, set this in your .env');
+                $this->error('✗ [Lett] Could not find your project key, set this in your .env');
             }
 
-            if (in_array(config('app.env'), config('let.environments'))) {
-                $this->info('✓ [Let] Correct environment found ('.config('app.env').')');
+            if (in_array(config('app.env'), config('lett.environments'))) {
+                $this->info('✓ [Lett] Correct environment found ('.config('app.env').')');
             } else {
-                $this->error('✗ [Let] Environment ('.config('app.env').') not allowed to send errors to Let, set this in your config');
+                $this->error('✗ [Lett] Environment ('.config('app.env').') not allowed to send errors to Let, set this in your config');
             }
 
             $response = $let->handle(
@@ -39,21 +39,21 @@ class TestCommand extends Command
             );
 
             if (isset($response->id)) {
-                $this->info('✓ [Let] Sent exception to Let with ID: '.$response->id);
+                $this->info('✓ [Lett] Sent exception to Let with ID: '.$response->id);
             } elseif (is_null($response)) {
-                $this->info('✓ [Let] Sent exception to Let!');
+                $this->info('✓ [Lett] Sent exception to Let!');
             } else {
-                $this->error('✗ [Let] Failed to send exception to Let');
+                $this->error('✗ [Lett] Failed to send exception to Let');
             }
         } catch (\Exception $ex) {
-            $this->error("✗ [Let] {$ex->getMessage()}");
+            $this->error("✗ [Lett] {$ex->getMessage()}");
         }
     }
 
     public function generateException(): ?Exception
     {
         try {
-            throw new Exception($this->argument('exception') ?? 'This is a test exception from the Let console');
+            throw new Exception($this->argument('exception') ?? 'This is a test exception from the Lett console');
         } catch (Exception $ex) {
             return $ex;
         }

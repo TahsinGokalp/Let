@@ -1,19 +1,19 @@
 <?php
 
-namespace Let\Http\Controllers;
+namespace Lett\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class LetReportController
+class LettReportController
 {
     /**
      * @return \Illuminate\Http\Response|\Illuminate\Contracts\Routing\ResponseFactory
      */
     public function report(Request $request)
     {
-        $laraBug = app('let');
+        $lett = app('lett');
 
-        $laraBug->handle(
+        $lett->handle(
             new \ErrorException($request->input('message')),
             'javascript',
             [

@@ -1,9 +1,9 @@
 <?php
 
-namespace Let;
+namespace Lett;
 
-use Let\Fakes\LetFake;
-use Let\Http\Client;
+use Lett\Fakes\LetFake;
+use Lett\Http\Client;
 
 /**
  * @method static void assertSent($throwable, $callback = null)
@@ -30,6 +30,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'let';
+        return 'lett';
     }
 }

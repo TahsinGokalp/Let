@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'login_key' => env('L_KEY', ''),
+    'login_key' => env('LETT_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     |
     */
 
-    'project_key' => env('L_PROJECT_KEY', ''),
+    'project_key' => env('LETT_PROJECT_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
     |
     */
 
-    'server' => env('L_SERVER', 'https://log.kodrika.com.tr/api/log'),
+    'server' => env('L_SERVER', 'https://log.tahsingokalp.dev/api/log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -138,6 +138,6 @@ return [
     | Never turn SSL verification off on production instances
     |
     */
-    'verify_ssl' => env('L_VERIFY_SSL', true),
+    'verify_ssl' => env('LETT_VERIFY_SSL', true),
 
 ];

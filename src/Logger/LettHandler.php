@@ -2,19 +2,20 @@
 
 namespace LettLogger;
 
+use Lett\Lett;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Level;
 use Monolog\Logger;
-use TahsinGokalp\Lett;
 use Throwable;
 
 class LettHandler extends AbstractProcessingHandler
 {
-    protected $lett;
+    protected Lett $lett;
 
     /**
      * @param  int  $level
      */
-    public function __construct(Lett $lett, $level = Logger::ERROR, bool $bubble = true)
+    public function __construct(Lett $lett, $level = Level::Error, bool $bubble = true)
     {
         $this->lett = $lett;
 

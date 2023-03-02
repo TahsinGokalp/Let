@@ -2,7 +2,7 @@
 
 namespace Lett;
 
-use Lett\Fakes\LetFake;
+use Lett\Fakes\LettFake;
 use Lett\Http\Client;
 
 /**
@@ -18,9 +18,9 @@ class Facade extends \Illuminate\Support\Facades\Facade
      *
      * @return void
      */
-    public static function fake()
+    public static function fake(): void
     {
-        static::swap(new LetFake(new Client('login_key', 'project_key')));
+        static::swap(new LettFake(new Client('login_key', 'project_key')));
     }
 
     /**
@@ -28,7 +28,7 @@ class Facade extends \Illuminate\Support\Facades\Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'lett';
     }

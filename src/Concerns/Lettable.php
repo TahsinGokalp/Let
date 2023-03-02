@@ -7,5 +7,5 @@ interface Lettable
     /**
      * @return array
      */
-    public function toLett();
+    public function toLett(): array;
 }

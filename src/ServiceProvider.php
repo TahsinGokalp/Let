@@ -6,19 +6,21 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Lett\Commands\TestCommand;
+use Lett\Logger\LettHandler;
 use Monolog\Logger;
+use Lett\Facade;
 
 class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Bootstrap the application events.
      */
-    public function boot()
+    public function boot(): void
     {
         // Publish configuration file
         if (function_exists('config_path')) {
             $this->publishes([
-                __DIR__ . '/../config/lett.php' => config_path('lett.php'),
+                __DIR__.'/../config/lett.php' => config_path('lett.php'),
             ]);
         }
 
@@ -28,7 +30,7 @@ class ServiceProvider extends BaseServiceProvider
         // Register facade
         if (class_exists(\Illuminate\Foundation\AliasLoader::class)) {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Lett', 'Lett\Facade');
+            $loader->alias('Lett', Facade::class);
         }
 
         // Register commands
@@ -37,7 +39,7 @@ class ServiceProvider extends BaseServiceProvider
         ]);
 
         // Map any routes
-        $this->mapLetApiRoutes();
+        $this->mapLettApiRoutes();
 
         // Create an alias to the lett-js-client.blade.php include
         Blade::include('lett::lett-js-client', 'lettJavaScriptClient');
@@ -48,7 +50,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/lett.php', 'lett');
+        $this->mergeConfigFrom(__DIR__.'/../config/lett.php', 'lett');
 
         $this->app->singleton('lett', function ($app) {
             return new Lett(new \Lett\Http\Client(
@@ -59,7 +61,7 @@ class ServiceProvider extends BaseServiceProvider
 
         if ($this->app['log'] instanceof \Illuminate\Log\LogManager) {
             $this->app['log']->extend('lett', function ($app, $config) {
-                $handler = new \Lett\Logger\LettHandler(
+                $handler = new LettHandler(
                     $app['lett']
                 );
 
@@ -68,14 +70,14 @@ class ServiceProvider extends BaseServiceProvider
         }
     }
 
-    protected function mapLettApiRoutes()
+    protected function mapLettApiRoutes(): void
     {
         Route::group(
             [
                 'namespace' => '\Lett\Http\Controllers',
                 'prefix' => 'lett-api',
             ],
-            function ($router) {
+            static function ($router) {
                 require __DIR__.'/../routes/api.php';
             }
         );

@@ -3,17 +3,21 @@
 namespace Lett\Http;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
     /** @var ClientInterface|null */
-    protected $client;
+    protected ?ClientInterface $client;
 
     /** @var string */
-    protected $login;
+    protected string $login;
 
     /** @var string */
-    protected $project;
+    protected string $project;
 
     public function __construct(string $login, string $project, ClientInterface $client = null)
     {
@@ -23,12 +27,12 @@ class Client
     }
 
     /**
-     * @param  array  $exception
-     * @return \GuzzleHttp\Promise\PromiseInterface|\Psr\Http\Message\ResponseInterface|null
+     * @param array $exception
+     * @return PromiseInterface|ResponseInterface|null
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function report($exception)
+    public function report(array $exception)
     {
         try {
             return $this->getGuzzleHttpClient()->request('POST', config('lett.server'), [
@@ -44,7 +48,7 @@ class Client
                 ], $exception),
                 'verify' => config('lett.verify_ssl'),
             ]);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (RequestException $e) {
             return $e->getResponse();
         } catch (\Exception $e) {
             return null;
@@ -68,7 +72,7 @@ class Client
     /**
      * @return $this
      */
-    public function setGuzzleHttpClient(ClientInterface $client)
+    public function setGuzzleHttpClient(ClientInterface $client): Client
     {
         $this->client = $client;
 

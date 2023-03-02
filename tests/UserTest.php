@@ -3,16 +3,16 @@
 namespace Lett\Tests;
 
 use Illuminate\Foundation\Auth\User as AuthUser;
-use let\Tests\Mocks\LettClient;
-use TahsinGokalp\Lett;
+use Lett\Lett;
+use Lett\Tests\Mocks\LettClient;
 
 class UserTest extends TestCase
 {
     /** @var Mocks\LettClient */
-    protected $client;
+    protected LettClient $client;
 
     /** @var Lett */
-    protected $lett;
+    protected Lett $lett;
 
     public function setUp(): void
     {
@@ -25,7 +25,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_return_custom_user()
+    public function it_return_custom_user(): void
     {
         $this->actingAs((new CustomerUser())->forceFill([
             'id' => 1,
@@ -38,7 +38,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_return_custom_user_with_to_lett()
+    public function it_return_custom_user_with_to_lett(): void
     {
         $this->actingAs((new CustomerUserWithToLet())->forceFill([
             'id' => 1,
@@ -51,7 +51,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_nothing_for_ghost()
+    public function it_returns_nothing_for_ghost(): void
     {
         $this->assertSame(null, $this->lett->getUser());
     }

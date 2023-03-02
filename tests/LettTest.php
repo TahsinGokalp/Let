@@ -7,17 +7,17 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TahsinGokalp\Lett;
 
 class LettTest extends TestCase
 {
     /** @var Lett */
-    protected $lett;
+    protected Lett $lett;
 
     /** @var Mocks\LettClient */
-    protected $client;
+    protected LettClient $client;
 
     public function setUp(): void
     {
@@ -30,7 +30,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function is_will_not_crash_if_let_returns_error_bad_response_exception()
+    public function is_will_not_crash_if_let_returns_error_bad_response_exception(): void
     {
         $this->lett = new Lett($this->client = new \Lett\Http\Client(
             'login_key',
@@ -50,7 +50,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function is_will_not_crash_if_let_returns_normal_exception()
+    public function is_will_not_crash_if_let_returns_normal_exception(): void
     {
         $this->lett = new Lett($this->client = new \Lett\Http\Client(
             'login_key',
@@ -70,7 +70,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_can_skip_exceptions_based_on_class()
+    public function it_can_skip_exceptions_based_on_class(): void
     {
         $this->app['config']['lett.except'] = [];
 
@@ -84,7 +84,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_can_skip_exceptions_based_on_environment()
+    public function it_can_skip_exceptions_based_on_environment(): void
     {
         $this->app['config']['lett.environments'] = [];
 
@@ -100,7 +100,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_will_return_false_for_sleeping_cache_exception_if_disabled()
+    public function it_will_return_false_for_sleeping_cache_exception_if_disabled(): void
     {
         $this->app['config']['lett.sleep'] = 0;
 
@@ -108,7 +108,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_is_a_sleeping_cache_exception()
+    public function it_can_check_if_is_a_sleeping_cache_exception(): void
     {
         $data = ['host' => 'localhost', 'method' => 'GET', 'exception' => 'it_can_check_if_is_a_sleeping_cache_exception', 'line' => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception'];
 
@@ -132,7 +132,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_formatted_exception_data()
+    public function it_can_get_formatted_exception_data(): void
     {
         $data = $this->lett->getExceptionData(new Exception(
             'it_can_get_formatted_exception_data'
@@ -148,7 +148,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_filters_the_data_based_on_the_configuration()
+    public function it_filters_the_data_based_on_the_configuration(): void
     {
         $this->assertContains('*password*', $this->app['config']['lett.blacklist']);
 
@@ -170,7 +170,7 @@ class LettTest extends TestCase
     }
 
     /** @test */
-    public function it_can_report_an_exception_to_lett()
+    public function it_can_report_an_exception_to_lett(): void
     {
         $this->app['config']['lett.environments'] = ['testing'];
 

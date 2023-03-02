@@ -7,22 +7,22 @@ use PHPUnit\Framework\Assert as PHPUnit;
 class LettFake extends \TahsinGokalp\Lett
 {
     /** @var array */
-    public $exceptions = [];
+    public array $exceptions = [];
 
-    public function assertRequestsSent(int $expectedCount)
+    public function assertRequestsSent(int $expectedCount): void
     {
         PHPUnit::assertCount($expectedCount, $this->exceptions);
     }
 
     /**
      * @param  mixed  $throwable
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      */
-    public function assertNotSent($throwable, $callback = null)
+    public function assertNotSent($throwable, callable $callback = null): void
     {
         $collect = collect($this->exceptions[$throwable] ?? []);
 
-        $callback = $callback ?: function () {
+        $callback = $callback ?: static function () {
             return true;
         };
 
@@ -30,23 +30,23 @@ class LettFake extends \TahsinGokalp\Lett
             return $callback($arguments);
         });
 
-        PHPUnit::assertTrue($filtered->count() == 0);
+        PHPUnit::assertEquals($filtered->count(), 0);
     }
 
-    public function assertNothingSent()
+    public function assertNothingSent(): void
     {
         PHPUnit::assertCount(0, $this->exceptions);
     }
 
     /**
      * @param  mixed  $throwable
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      */
-    public function assertSent($throwable, $callback = null)
+    public function assertSent($throwable, callable $callback = null): void
     {
         $collect = collect($this->exceptions[$throwable] ?? []);
 
-        $callback = $callback ?: function () {
+        $callback = $callback ?: static function () {
             return true;
         };
 
@@ -57,7 +57,7 @@ class LettFake extends \TahsinGokalp\Lett
         PHPUnit::assertTrue($filtered->count() > 0);
     }
 
-    public function handle(\Throwable $exception, $fileType = 'php', array $customData = [])
+    public function handle(\Throwable $exception, $fileType = 'php', array $customData = []): void
     {
         $this->exceptions[get_class($exception)][] = $exception;
     }

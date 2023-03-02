@@ -1,14 +1,14 @@
 <?php
 
-namespace Letty\Tests;
+namespace Lett\Tests;
 
+use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
-use TahsinGokalp\Lett;
 
 class TestCommandTest extends TestCase
 {
     /** @test */
-    public function it_detects_if_the_login_key_is_set()
+    public function it_detects_if_the_login_key_is_set(): void
     {
         $this->app['config']['lett.login_key'] = '';
 
@@ -24,7 +24,7 @@ class TestCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_detects_if_the_project_key_is_set()
+    public function it_detects_if_the_project_key_is_set(): void
     {
         $this->app['config']['lett.project_key'] = '';
 
@@ -40,7 +40,7 @@ class TestCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_detects_that_its_running_in_the_correct_environment()
+    public function it_detects_that_its_running_in_the_correct_environment(): void
     {
         $this->app['config']['app.env'] = 'production';
         $this->app['config']['lett.environments'] = [];
@@ -57,7 +57,7 @@ class TestCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_detects_that_it_fails_to_send_to_lett()
+    public function it_detects_that_it_fails_to_send_to_lett(): void
     {
         $this->artisan('lett:test')
             ->expectsOutput('✗ [Lett] Failed to send exception to lett')

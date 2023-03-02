@@ -2,8 +2,8 @@
 
 namespace Lett\Tests\Fakes;
 
-use Lett\Tests\TestCase;
 use Lett\Facade as LettFacade;
+use Lett\Tests\TestCase;
 
 class LettFakeTest extends TestCase
 {

@@ -16,7 +16,7 @@ class LoggingTest extends TestCase
     }
 
     /** @test */
-    public function it_will_not_send_log_information_to_lett()
+    public function it_will_not_send_log_information_to_lett(): void
     {
         $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
             \Illuminate\Support\Facades\Log::{$type}('log');

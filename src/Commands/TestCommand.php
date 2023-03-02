@@ -11,7 +11,7 @@ class TestCommand extends Command
 
     protected $description = 'Generate a test exception and send it to lett';
 
-    public function handle()
+    public function handle(): void
     {
         try {
             $let = app('lett');

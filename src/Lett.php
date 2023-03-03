@@ -268,7 +268,7 @@ class Lett
 
         $index = $currentLine - 1;
 
-        if (! array_key_exists($index, $lines)) {
+        if (!array_key_exists($index, $lines)) {
             return [];
         }
 
@@ -305,7 +305,7 @@ class Lett
     {
         return 'lett.'.Str::slug($data['host'].'_'.$data['method'].
                 '_'.$data['exception'].'_'.$data['line'].'_'
-                .$data['file']. '_'.$data['class']);
+                .$data['file'].'_'.$data['class']);
     }
 
     /**

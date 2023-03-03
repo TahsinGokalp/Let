@@ -24,12 +24,11 @@ class DoctorCommand extends Command
             $this->error('✗ [Lett] Could not find your project key, set this in your .env');
         }
 
-        if (in_array((string)config('app.env'), config('lett.environments'), true)) {
+        if (in_array((string) config('app.env'), config('lett.environments'), true)) {
             $this->info('✓ [Lett] Correct environment found ('.config('app.env').')');
         } else {
             $this->error('✗ [Lett] Environment ('.config('app.env')
                 .') not allowed to send errors to Lett, set this in your config');
         }
     }
-
 }

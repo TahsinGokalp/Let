@@ -35,7 +35,7 @@ class UserTest extends TestCase
         ]));
 
         $this->assertSame(['id' => 1, 'username' => 'username',
-            'password' => 'password', 'email' => 'email'], $this->lett->getUser());
+            'password'          => 'password', 'email' => 'email', ], $this->lett->getUser());
     }
 
     /** @test */

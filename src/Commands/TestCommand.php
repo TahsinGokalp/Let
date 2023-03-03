@@ -3,9 +3,9 @@
 namespace Lett\Commands;
 
 use Exception;
+use Illuminate\Console\Command;
 use Lett\Lett;
 use RuntimeException;
-use Illuminate\Console\Command;
 
 class TestCommand extends Command
 {

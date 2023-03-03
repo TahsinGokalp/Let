@@ -32,12 +32,11 @@ class LettTest extends TestCase
     /** @test */
     public function is_will_not_crash_if_let_returns_error_bad_response_exception(): void
     {
-        $this->lett = new LettFake($this->client = new LettClient(
+        $lett = new Lett($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
 
-        //
         $this->app['config']['lett.environments'] = ['testing'];
 
         $this->client->setGuzzleHttpClient(new Client([
@@ -46,7 +45,7 @@ class LettTest extends TestCase
             ]),
         ]));
 
-        $this->assertInstanceOf(get_class(new \stdClass()), $this->lett->handle(
+        $this->assertInstanceOf(get_class(new \stdClass()), $lett->handle(
             new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')
         ));
     }
@@ -54,12 +53,11 @@ class LettTest extends TestCase
     /** @test */
     public function is_will_not_crash_if_let_returns_normal_exception(): void
     {
-        $this->lett = new LettFake($this->client = new LettClient(
+        $lett = new Lett($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
 
-        //
         $this->app['config']['let.environments'] = ['testing'];
 
         $this->client->setGuzzleHttpClient(new Client([
@@ -68,7 +66,7 @@ class LettTest extends TestCase
             ]),
         ]));
 
-        $this->assertFalse($this->lett->handle(new Exception('is_will_not_crash_if_let_returns_normal_exception')));
+        $this->assertFalse($lett->handle(new Exception('is_will_not_crash_if_let_returns_normal_exception')));
     }
 
     /** @test */

@@ -27,8 +27,7 @@ class DoctorCommand extends Command
         if (in_array((string) config('app.env'), config('lett.environments'), true)) {
             $this->info('✓ [Lett] Correct environment found ('.config('app.env').')');
         } else {
-            $this->error('✗ [Lett] Environment ('.config('app.env')
-                .') not allowed to send errors to Lett, set this in your config');
+            $this->error('✗ [Lett] Environment ('.config('app.env').') not allowed to send errors to Lett, set this in your config');
         }
     }
 }

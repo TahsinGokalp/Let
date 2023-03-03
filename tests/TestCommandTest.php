@@ -46,8 +46,7 @@ class TestCommandTest extends TestCase
         $this->app['config']['lett.environments'] = [];
 
         $this->artisan('lett:doctor')
-            ->expectsOutput('✗ [Lett] Environment (production) not allowed to send errors
-            to let, set this in your config')
+            ->expectsOutput('✗ [Lett] Environment (production) not allowed to send errors to let, set this in your config')
             ->assertExitCode(0);
 
         $this->app['config']['lett.environments'] = ['production'];

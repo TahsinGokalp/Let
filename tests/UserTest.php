@@ -41,7 +41,7 @@ class UserTest extends TestCase
     /** @test */
     public function it_return_custom_user_with_to_lett(): void
     {
-        $this->actingAs((new CustomerUserWithToLet())->forceFill([
+        $this->actingAs((new CustomerUserWithToLett())->forceFill([
             'id'       => 1,
             'username' => 'username',
             'password' => 'password',
@@ -63,9 +63,9 @@ class CustomerUser extends AuthUser
     protected $guarded = [];
 }
 
-class CustomerUserWithToLet extends CustomerUser implements \Lett\Concerns\Lettable
+class CustomerUserWithToLett extends CustomerUser implements \Lett\Concerns\Lettable
 {
-    public function toLett()
+    public function toLett() : array
     {
         return [
             'username' => $this->username,

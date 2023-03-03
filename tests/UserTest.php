@@ -65,7 +65,7 @@ class CustomerUser extends AuthUser
 
 class CustomerUserWithToLett extends CustomerUser implements \Lett\Concerns\Lettable
 {
-    public function toLett() : array
+    public function toLett(): array
     {
         return [
             'username' => $this->username,

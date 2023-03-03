@@ -1,5 +1,5 @@
 # Lett
-Laravel 6.x/7.x/8.x/9.x/10.x package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
+Laravel package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
 
 [![Software License](https://poser.pugx.org/tahsingokalp/lett/license.svg)](LICENSE.md)
 [![Latest Version on Packagist](https://poser.pugx.org/tahsingokalp/lett/v/stable.svg)](https://packagist.org/packages/tahsingokalp/lett)
@@ -14,7 +14,7 @@ composer require tahsingokalp/lett
 
 Then publish the config and migration file of the package using the vendor publish command.
 ```bash
-php artisan vendor:publish --provider="Lett\ServiceProvider"
+php artisan vendor:publish --provider="Lett\LettServiceProvider"
 ```
 And adjust config file (`config/lett.php`) with your desired settings.
 
@@ -43,7 +43,7 @@ In `bootstrap/app.php` you will need to:
     ```
 - Register lett service provider:
     ```php
-    $app->register(Lett\ServiceProvider::class);
+    $app->register(Lett\LettServiceProvider::class);
     ```
 
 ## Configuration variables

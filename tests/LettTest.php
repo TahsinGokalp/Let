@@ -46,7 +46,8 @@ class LettTest extends TestCase
             ]),
         ]));
 
-        $this->assertInstanceOf(get_class(new \stdClass()), $this->lett->handle(new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')));
+        $this->assertInstanceOf(get_class(new \stdClass()), $this->lett->handle(
+            new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')));
     }
 
     /** @test */
@@ -110,7 +111,9 @@ class LettTest extends TestCase
     /** @test */
     public function it_can_check_if_is_a_sleeping_cache_exception(): void
     {
-        $data = ['host' => 'localhost', 'method' => 'GET', 'exception' => 'it_can_check_if_is_a_sleeping_cache_exception', 'line' => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception'];
+        $data = ['host' => 'localhost', 'method' => 'GET',
+            'exception' => 'it_can_check_if_is_a_sleeping_cache_exception',
+            'line' => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception'];
 
         Carbon::setTestNow('2019-10-12 13:30:00');
 

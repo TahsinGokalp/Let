@@ -12,13 +12,13 @@ class TestCommandTest extends TestCase
     {
         $this->app['config']['lett.login_key'] = '';
 
-        $this->artisan('lett:test')
+        $this->artisan('lett:doctor')
             ->expectsOutput('✗ [Lett] Could not find your login key, set this in your .env')
             ->assertExitCode(0);
 
         $this->app['config']['lett.login_key'] = 'test';
 
-        $this->artisan('lett:test')
+        $this->artisan('lett:doctor')
             ->expectsOutput('✓ [Lett] Found login key')
             ->assertExitCode(0);
     }
@@ -28,13 +28,13 @@ class TestCommandTest extends TestCase
     {
         $this->app['config']['lett.project_key'] = '';
 
-        $this->artisan('lett:test')
+        $this->artisan('lett:doctor')
             ->expectsOutput('✗ [Lett] Could not find your project key, set this in your .env')
             ->assertExitCode(0);
 
         $this->app['config']['lett.project_key'] = 'test';
 
-        $this->artisan('lett:test')
+        $this->artisan('lett:doctor')
             ->expectsOutput('✓ [Lett] Found project key')
             ->assertExitCode(0);
     }
@@ -45,13 +45,14 @@ class TestCommandTest extends TestCase
         $this->app['config']['app.env'] = 'production';
         $this->app['config']['lett.environments'] = [];
 
-        $this->artisan('lett:test')
-            ->expectsOutput('✗ [Lett] Environment (production) not allowed to send errors to let, set this in your config')
+        $this->artisan('lett:doctor')
+            ->expectsOutput('✗ [Lett] Environment (production) not allowed to send errors
+            to let, set this in your config')
             ->assertExitCode(0);
 
         $this->app['config']['lett.environments'] = ['production'];
 
-        $this->artisan('lett:test')
+        $this->artisan('lett:doctor')
             ->expectsOutput('✓ [Lett] Correct environment found ('.config('app.env').')')
             ->assertExitCode(0);
     }

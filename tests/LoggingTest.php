@@ -2,6 +2,8 @@
 
 namespace Lett\Tests;
 
+use RuntimeException;
+
 class LoggingTest extends TestCase
 {
     public function setUp(): void
@@ -38,7 +40,7 @@ class LoggingTest extends TestCase
     public function it_will_only_send_throwables_to_lett()
     {
         $this->app['router']->get('/throwables-via-route', function () {
-            throw new \Exception('exception-via-route');
+            throw new RuntimeException('exception-via-route');
         });
 
         $this->get('/throwables-via-route');

@@ -4,6 +4,7 @@ namespace Lett\Tests\Fakes;
 
 use Lett\Facade as LettFacade;
 use Lett\Tests\TestCase;
+use RuntimeException;
 
 class LettFakeTest extends TestCase
 {
@@ -22,7 +23,7 @@ class LettFakeTest extends TestCase
     public function it_will_sent_exception_to_let_if_exception_is_thrown()
     {
         $this->app['router']->get('/exception', function () {
-            throw new \Exception('Exception');
+            throw new RuntimeException('Exception');
         });
 
         $this->get('/exception');

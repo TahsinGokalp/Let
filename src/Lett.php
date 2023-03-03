@@ -41,17 +41,10 @@ class Lett
      */
     public function handle(Throwable $exception, string $fileType = 'php', array $customData = [])
     {
-        if ($this->isSkipEnvironment()) {
-            return false;
-        }
-
         $data = $this->getExceptionData($exception);
 
-        if ($this->isSkipException($data['class'])) {
-            return false;
-        }
-
-        if ($this->isSleepingException($data)) {
+        if ($this->isSkipEnvironment() || $this->isSkipException($data['class'])
+            || $this->isSleepingException($data)) {
             return false;
         }
 
@@ -273,7 +266,7 @@ class Lett
         $index = $currentLine - 1;
 
         if (! array_key_exists($index, $lines)) {
-            return;
+            return [];
         }
 
         return [
@@ -307,7 +300,9 @@ class Lett
      */
     private function createExceptionString(array $data): string
     {
-        return 'lett.'.Str::slug($data['host'].'_'.$data['method'].'_'.$data['exception'].'_'.$data['line'].'_'.$data['file'].'_'.$data['class']);
+        return 'lett.'.Str::slug($data['host'].'_'.$data['method'].
+                '_'.$data['exception'].'_'.$data['line'].'_'
+                .$data['file']. '_'.$data['class']);
     }
 
     /**

@@ -31,8 +31,6 @@ class LettHandler extends AbstractProcessingHandler
             $this->lett->handle(
                 $record['context']['exception']
             );
-
-            return;
         }
     }
 }

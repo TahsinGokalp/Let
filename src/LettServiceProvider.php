@@ -10,7 +10,7 @@ use Lett\Logger\LettHandler;
 use Monolog\Logger;
 use Lett\Facade;
 
-class ServiceProvider extends BaseServiceProvider
+class LettServiceProvider extends BaseServiceProvider
 {
     /**
      * Bootstrap the application events.
@@ -52,7 +52,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/lett.php', 'lett');
 
-        $this->app->singleton('lett', function ($app) {
+        $this->app->singleton('lett', function () {
             return new Lett(new \Lett\Http\Client(
                 config('lett.login_key', 'login_key'),
                 config('lett.project_key', 'project_key')
@@ -60,7 +60,7 @@ class ServiceProvider extends BaseServiceProvider
         });
 
         if ($this->app['log'] instanceof \Illuminate\Log\LogManager) {
-            $this->app['log']->extend('lett', function ($app, $config) {
+            $this->app['log']->extend('lett', function ($app) {
                 $handler = new LettHandler(
                     $app['lett']
                 );
@@ -77,8 +77,8 @@ class ServiceProvider extends BaseServiceProvider
                 'namespace' => '\Lett\Http\Controllers',
                 'prefix' => 'lett-api',
             ],
-            static function ($router) {
-                require __DIR__.'/../routes/api.php';
+            static function () {
+                require_once __DIR__.'/../routes/api.php';
             }
         );
     }

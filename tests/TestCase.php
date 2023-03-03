@@ -7,7 +7,6 @@ use Lett\LettServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-
     /**
      * @param Application $app
      *

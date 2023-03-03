@@ -5,7 +5,6 @@ namespace LettLogger;
 use Lett\Lett;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
-use Monolog\Logger;
 use Throwable;
 
 class LettHandler extends AbstractProcessingHandler
@@ -13,7 +12,7 @@ class LettHandler extends AbstractProcessingHandler
     protected Lett $lett;
 
     /**
-     * @param  int  $level
+     * @param int $level
      */
     public function __construct(Lett $lett, $level = Level::Error, bool $bubble = true)
     {
@@ -23,7 +22,7 @@ class LettHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param  array  $record
+     * @param array $record
      */
     protected function write($record): void
     {

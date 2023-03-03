@@ -19,11 +19,11 @@ class LettReportController
             new \ErrorException($request->input('message')),
             'javascript',
             [
-                'file' => $request->input('file'),
-                'line' => $request->input('line'),
+                'file'    => $request->input('file'),
+                'line'    => $request->input('line'),
                 'message' => $request->input('message'),
-                'stack' => $request->input('stack'),
-                'url' => $request->input('url'),
+                'stack'   => $request->input('stack'),
+                'url'     => $request->input('url'),
             ]
         );
 

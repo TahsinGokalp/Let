@@ -15,7 +15,7 @@ class LettFake extends \TahsinGokalp\Lett
     }
 
     /**
-     * @param  mixed  $throwable
+     * @param mixed         $throwable
      * @param callable|null $callback
      */
     public function assertNotSent($throwable, callable $callback = null): void
@@ -39,7 +39,7 @@ class LettFake extends \TahsinGokalp\Lett
     }
 
     /**
-     * @param  mixed  $throwable
+     * @param mixed         $throwable
      * @param callable|null $callback
      */
     public function assertSent($throwable, callable $callback = null): void

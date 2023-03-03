@@ -37,6 +37,7 @@ class Lett
 
     /**
      * @param string $fileType
+     *
      * @return bool|mixed
      */
     public function handle(Throwable $exception, string $fileType = 'php', array $customData = [])
@@ -55,7 +56,7 @@ class Lett
             return false;
         }
 
-        if ((string)$fileType === 'javascript') {
+        if ((string) $fileType === 'javascript') {
             $data['fullUrl'] = $customData['url'];
             $data['file'] = $customData['file'];
             $data['file_type'] = $fileType;
@@ -78,13 +79,13 @@ class Lett
 
                 $index = $currentLine - 1;
 
-                if (! array_key_exists($index, $lines)) {
+                if (!array_key_exists($index, $lines)) {
                     continue;
                 }
 
                 $data['executor'][] = [
                     'line_number' => $currentLine,
-                    'line' => $lines[$index],
+                    'line'        => $lines[$index],
                 ];
             }
 
@@ -93,7 +94,7 @@ class Lett
 
         $rawResponse = $this->logError($data);
 
-        if (! $rawResponse) {
+        if (!$rawResponse) {
             return false;
         }
 
@@ -164,16 +165,16 @@ class Lett
         $data['release'] = config('lett.release', null);
         $data['storage'] = [
             'SERVER' => [
-                'USER' => Request::server('USER'),
+                'USER'            => Request::server('USER'),
                 'HTTP_USER_AGENT' => Request::server('HTTP_USER_AGENT'),
                 'SERVER_PROTOCOL' => Request::server('SERVER_PROTOCOL'),
                 'SERVER_SOFTWARE' => Request::server('SERVER_SOFTWARE'),
-                'PHP_VERSION' => PHP_VERSION,
+                'PHP_VERSION'     => PHP_VERSION,
             ],
-            'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
-            'COOKIE' => $this->filterVariables(Request::cookie()),
-            'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
-            'HEADERS' => $this->filterVariables(Request::header()),
+            'OLD'        => $this->filterVariables(Request::hasSession() ? Request::old() : []),
+            'COOKIE'     => $this->filterVariables(Request::cookie()),
+            'SESSION'    => $this->filterVariables(Request::hasSession() ? Session::all() : []),
+            'HEADERS'    => $this->filterVariables(Request::header()),
             'PARAMETERS' => $this->filterVariables($this->filterParameterValues(Request::all())),
         ];
 
@@ -213,6 +214,7 @@ class Lett
 
     /**
      * @param array $parameters
+     *
      * @return array
      */
     public function filterParameterValues(array $parameters): array
@@ -229,7 +231,8 @@ class Lett
     /**
      * Determines whether the given parameter value should be filtered.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return bool
      */
     public function shouldParameterValueBeFiltered($value): bool
@@ -272,13 +275,13 @@ class Lett
 
         $index = $currentLine - 1;
 
-        if (! array_key_exists($index, $lines)) {
+        if (!array_key_exists($index, $lines)) {
             return;
         }
 
         return [
             'line_number' => $currentLine,
-            'line' => $lines[$index],
+            'line'        => $lines[$index],
         ];
     }
 
@@ -295,7 +298,7 @@ class Lett
      */
     public function isSleepingException(array $data): bool
     {
-        if ((int)config('lett.sleep', 0) === 0) {
+        if ((int) config('lett.sleep', 0) === 0) {
             return false;
         }
 
@@ -311,14 +314,15 @@ class Lett
     }
 
     /**
-     * @return PromiseInterface|ResponseInterface|null
      * @throws GuzzleException
+     *
+     * @return PromiseInterface|ResponseInterface|null
      */
     private function logError($exception)
     {
         return $this->client->report([
             'exception' => $exception,
-            'user' => $this->getUser(),
+            'user'      => $this->getUser(),
         ]);
     }
 

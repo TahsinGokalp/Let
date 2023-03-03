@@ -1,6 +1,6 @@
 <?php
 
-namespace LettLogger;
+namespace Lett\Logger;
 
 use Lett\Lett;
 use Monolog\Handler\AbstractProcessingHandler;

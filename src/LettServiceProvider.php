@@ -5,6 +5,7 @@ namespace Lett;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Lett\Commands\DoctorCommand;
 use Lett\Commands\TestCommand;
 use Lett\Logger\LettHandler;
 use Monolog\Logger;
@@ -35,6 +36,7 @@ class LettServiceProvider extends BaseServiceProvider
         // Register commands
         $this->commands([
             TestCommand::class,
+            DoctorCommand::class,
         ]);
 
         // Map any routes

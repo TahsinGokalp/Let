@@ -7,14 +7,15 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use Lett\Fakes\LettFake;
 use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LettTest extends TestCase
 {
-    /** @var Lett */
-    protected Lett $lett;
+    /** @var LettFake */
+    protected LettFake $lett;
 
     /** @var Mocks\LettClient */
     protected LettClient $client;
@@ -23,7 +24,7 @@ class LettTest extends TestCase
     {
         parent::setUp();
 
-        $this->lett = new Lett($this->client = new LettClient(
+        $this->lett = new LettFake($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
@@ -32,7 +33,7 @@ class LettTest extends TestCase
     /** @test */
     public function is_will_not_crash_if_let_returns_error_bad_response_exception(): void
     {
-        $this->lett = new Lett($this->client = new \Lett\Http\Client(
+        $this->lett = new LettFake($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
@@ -54,7 +55,7 @@ class LettTest extends TestCase
     /** @test */
     public function is_will_not_crash_if_let_returns_normal_exception(): void
     {
-        $this->lett = new Lett($this->client = new \Lett\Http\Client(
+        $this->lett = new LettFake($this->client = new LettClient(
             'login_key',
             'project_key'
         ));
@@ -64,7 +65,7 @@ class LettTest extends TestCase
 
         $this->client->setGuzzleHttpClient(new Client([
             'handler' => MockHandler::createWithMiddleware([
-                new \Exception(),
+                new Exception(),
             ]),
         ]));
 
@@ -178,7 +179,7 @@ class LettTest extends TestCase
     {
         $this->app['config']['lett.environments'] = ['testing'];
 
-        $this->let->handle(new Exception('it_can_report_an_exception_to_lett'));
+        $this->lett->handle(new Exception('it_can_report_an_exception_to_lett'));
 
         $this->client->assertRequestsSent(1);
     }

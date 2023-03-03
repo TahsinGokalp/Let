@@ -4,7 +4,7 @@ namespace Lett\Fakes;
 
 use PHPUnit\Framework\Assert as PHPUnit;
 
-class LettFake extends \TahsinGokalp\Lett
+class LettFake extends \Lett\Lett
 {
     /** @var array */
     public array $exceptions = [];

@@ -2,9 +2,9 @@
 
 namespace Lett\Tests\Fakes;
 
+use Exception;
 use Lett\Facade as LettFacade;
 use Lett\Tests\TestCase;
-use Exception;
 
 class LettFakeTest extends TestCase
 {

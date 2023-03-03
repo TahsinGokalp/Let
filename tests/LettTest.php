@@ -156,8 +156,8 @@ class LettTest extends TestCase
         $this->assertContains('*password*', $this->app['config']['lett.blacklist']);
 
         $data = [
-            'password' => 'testing',
-            'not_password' => 'testing',
+            'password'      => 'testing',
+            'not_password'  => 'testing',
             'not_password2' => [
                 'password' => 'testing',
             ],

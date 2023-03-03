@@ -8,7 +8,6 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Lett\Commands\TestCommand;
 use Lett\Logger\LettHandler;
 use Monolog\Logger;
-use Lett\Facade;
 
 class LettServiceProvider extends BaseServiceProvider
 {
@@ -75,7 +74,7 @@ class LettServiceProvider extends BaseServiceProvider
         Route::group(
             [
                 'namespace' => '\Lett\Http\Controllers',
-                'prefix' => 'lett-api',
+                'prefix'    => 'lett-api',
             ],
             static function () {
                 require_once __DIR__.'/../routes/api.php';

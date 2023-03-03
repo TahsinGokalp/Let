@@ -14,6 +14,7 @@ class LettClient extends \Lett\Http\Client
 
     /**
      * @param array $exception
+     *
      * @throws \JsonException
      */
     public function report(array $exception): Response

@@ -28,10 +28,10 @@ class UserTest extends TestCase
     public function it_return_custom_user(): void
     {
         $this->actingAs((new CustomerUser())->forceFill([
-            'id' => 1,
+            'id'       => 1,
             'username' => 'username',
             'password' => 'password',
-            'email' => 'email',
+            'email'    => 'email',
         ]));
 
         $this->assertSame(['id' => 1, 'username' => 'username', 'password' => 'password', 'email' => 'email'], $this->lett->getUser());
@@ -41,10 +41,10 @@ class UserTest extends TestCase
     public function it_return_custom_user_with_to_lett(): void
     {
         $this->actingAs((new CustomerUserWithToLet())->forceFill([
-            'id' => 1,
+            'id'       => 1,
             'username' => 'username',
             'password' => 'password',
-            'email' => 'email',
+            'email'    => 'email',
         ]));
 
         $this->assertSame(['username' => 'username', 'email' => 'email'], $this->lett->getUser());
@@ -68,7 +68,7 @@ class CustomerUserWithToLet extends CustomerUser implements \Lett\Concerns\Letta
     {
         return [
             'username' => $this->username,
-            'email' => $this->email,
+            'email'    => $this->email,
         ];
     }
 }

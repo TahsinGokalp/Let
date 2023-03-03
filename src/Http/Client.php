@@ -28,9 +28,10 @@ class Client
 
     /**
      * @param array $exception
-     * @return PromiseInterface|ResponseInterface|null
      *
      * @throws GuzzleException
+     *
+     * @return PromiseInterface|ResponseInterface|null
      */
     public function report(array $exception)
     {
@@ -38,12 +39,12 @@ class Client
             return $this->getGuzzleHttpClient()->request('POST', config('lett.server'), [
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->login,
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'User-Agent' => 'Let-Package',
+                    'Content-Type'  => 'application/json',
+                    'Accept'        => 'application/json',
+                    'User-Agent'    => 'Let-Package',
                 ],
                 'json' => array_merge([
-                    'project' => $this->project,
+                    'project'    => $this->project,
                     'additional' => [],
                 ], $exception),
                 'verify' => config('lett.verify_ssl'),
@@ -60,7 +61,7 @@ class Client
      */
     public function getGuzzleHttpClient()
     {
-        if (! isset($this->client)) {
+        if (!isset($this->client)) {
             $this->client = new \GuzzleHttp\Client([
                 'timeout' => 15,
             ]);

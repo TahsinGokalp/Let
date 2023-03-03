@@ -2,7 +2,6 @@
 
 namespace Lett\Tests;
 
-use Illuminate\Support\Facades\Artisan;
 use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
 

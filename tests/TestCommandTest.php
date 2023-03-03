@@ -2,6 +2,7 @@
 
 namespace Lett\Tests;
 
+use Illuminate\Support\Facades\Artisan;
 use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
 
@@ -59,6 +60,7 @@ class TestCommandTest extends TestCase
     /** @test */
     public function it_detects_that_it_fails_to_send_to_lett(): void
     {
+        $this->artisan('lett:test')->run();
         $this->artisan('lett:test')
             ->expectsOutput('✗ [Lett] Failed to send exception to lett')
             ->assertExitCode(0);

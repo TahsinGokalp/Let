@@ -8,7 +8,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Lett\Fakes\LettFake;
-use Lett\Lett;
 use Lett\Tests\Mocks\LettClient;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

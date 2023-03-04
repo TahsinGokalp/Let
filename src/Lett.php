@@ -123,7 +123,7 @@ class Lett
 
     public function getLastExceptionId(): ?string
     {
-        return $this->lastExceptionId;
+        return $this->lastExceptionId ?? null;
     }
 
     public function getExceptionData(Throwable $exception): array

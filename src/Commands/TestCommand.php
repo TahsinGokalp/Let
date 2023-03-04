@@ -23,14 +23,17 @@ class TestCommand extends Command
                 $this->generateException()
             );
 
-            if (isset($response->id)) {
-                $this->info('✓ [Lett] Sent exception to Let with ID: '.$response->id);
-            } elseif (is_null($response)) {
-                $this->info('✓ [Lett] Sent exception to Let!');
-            } else {
-                $this->error('✗ [Lett] Failed to send exception to Let');
+            if (is_null($response)) {
+                $this->info('✓ [Lett] Sent exception to lett!');
+            }else if (!is_bool($response)) {
+                $body = $response->getBody()->getContents();
+                $body = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+                $this->info('✓ [Lett] Sent exception to lett with ID: '.$body['id']);
+            }else {
+                $this->error('✗ [Lett] Failed to send exception to lett');
             }
         } catch (Exception $ex) {
+            dd($ex->getMessage());
             $this->error("✗ [Lett] Failed to send {$ex->getMessage()}");
         }
 
@@ -40,7 +43,7 @@ class TestCommand extends Command
     public function generateException(): ?Exception
     {
         try {
-            throw new RuntimeException($this->argument('exception') ?? 'This is a test exception from the Lett console');
+            throw new RuntimeException('This is a test exception from the Lett console');
         } catch (RuntimeException $ex) {
             return $ex;
         }

@@ -25,4 +25,9 @@ class LettClient extends Client
         return new Response(200, [], json_encode(['id' => self::RESPONSE_ID], JSON_THROW_ON_ERROR));
     }
 
+    public function requestsSent(): array
+    {
+        return $this->requests;
+    }
+
 }

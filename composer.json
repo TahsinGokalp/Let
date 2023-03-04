@@ -18,11 +18,10 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.0",
         "guzzlehttp/guzzle": "^7.5",
         "illuminate/contracts": "^9.0 || ^10.0",
-        "illuminate/support": "^9.0 || ^10.0",
-        "spatie/laravel-package-tools": "^1.14.0"
+        "illuminate/support": "^9.0 || ^10.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
@@ -69,6 +68,6 @@
             }
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

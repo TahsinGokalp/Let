@@ -1,10 +1,9 @@
 <?php
 
+use TahsinGokalp\Lett\Lett;
 use TahsinGokalp\Lett\Tests\Mocks\CustomerUser;
 use TahsinGokalp\Lett\Tests\Mocks\CustomerUserWithToLett;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
-use TahsinGokalp\Lett\Concerns\Lettable;
-use TahsinGokalp\Lett\Lett;
 
 it('it_return_custom_user', function () {
     $lett = new Lett($this->client = new LettClient(
@@ -20,7 +19,7 @@ it('it_return_custom_user', function () {
     ]));
 
     expect($lett->getUser())->toBe(['id' => 1, 'username' => 'username',
-        'password'          => 'password', 'email' => 'email', ]);
+        'password'                       => 'password', 'email' => 'email', ]);
 });
 
 it('it_return_custom_user_with_to_lett', function () {
@@ -47,5 +46,3 @@ it('it_returns_nothing_for_ghost', function () {
 
     expect($lett->getUser())->toBeNull();
 });
-
-

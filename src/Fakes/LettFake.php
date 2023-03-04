@@ -58,6 +58,7 @@ class LettFake extends Lett
     public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
     {
         $this->exceptions[get_class($exception)][] = $exception;
+
         return new Response(200, [], json_encode(['id' => LettClient::RESPONSE_ID], JSON_THROW_ON_ERROR));
     }
 }

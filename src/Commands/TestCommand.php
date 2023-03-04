@@ -25,11 +25,11 @@ class TestCommand extends Command
 
             if (is_null($response)) {
                 $this->info('✓ [Lett] Sent exception to lett!');
-            }else if (!is_bool($response)) {
+            } elseif (!is_bool($response)) {
                 $body = $response->getBody()->getContents();
                 $body = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
                 $this->info('✓ [Lett] Sent exception to lett with ID: '.$body['id']);
-            }else {
+            } else {
                 $this->error('✗ [Lett] Failed to send exception to lett');
             }
         } catch (Exception $ex) {

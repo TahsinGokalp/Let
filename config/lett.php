@@ -11,7 +11,7 @@ return [
    |
    */
 
-    'server' => env('L_SERVER', 'https://log.tahsingokalp.dev/api/log'),
+    'server' => env('L_SERVER', 'https://tahsingokalp.dev/api/log'),
 
     /*
     |--------------------------------------------------------------------------

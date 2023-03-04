@@ -1,19 +1,36 @@
 <?php
 
-namespace Lett\Tests;
+namespace TahsinGokalp\Lett\Tests;
 
-use Illuminate\Foundation\Application;
-use Lett\LettServiceProvider;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Orchestra\Testbench\TestCase as Orchestra;
+use TahsinGokalp\Lett\LettServiceProvider;
 
-class TestCase extends \Orchestra\Testbench\TestCase
+class TestCase extends Orchestra
 {
-    /**
-     * @param Application $app
-     *
-     * @return array
-     */
-    protected function getPackageProviders($app): array
+    protected function setUp(): void
     {
-        return [LettServiceProvider::class];
+        parent::setUp();
+
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'TahsinGokalp\\Lett\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        );
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            LettServiceProvider::class,
+        ];
+    }
+
+    public function getEnvironmentSetUp($app)
+    {
+        config()->set('database.default', 'testing');
+
+        /*
+        $migration = include __DIR__.'/../database/migrations/create_lett_table.php.stub';
+        $migration->up();
+        */
     }
 }

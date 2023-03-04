@@ -15,8 +15,9 @@ class LettClient extends Client
     /**
      * @param array $exception
      *
-     * @return Response
      * @throws \JsonException
+     *
+     * @return Response
      */
     public function report(array $exception): Response
     {
@@ -29,5 +30,4 @@ class LettClient extends Client
     {
         return $this->requests;
     }
-
 }

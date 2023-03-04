@@ -2,11 +2,7 @@
 
 use TahsinGokalp\Lett\Facade;
 use TahsinGokalp\Lett\Fakes\LettFake;
-use TahsinGokalp\Lett\Tests\Mocks\CustomerUser;
-use TahsinGokalp\Lett\Tests\Mocks\CustomerUserWithToLett;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
-use TahsinGokalp\Lett\Concerns\Lettable;
-use TahsinGokalp\Lett\Lett;
 
 it('it_will_not_send_log_information_to_lett', function () {
     config()->set('logging.channels.lett', ['driver' => 'lett']);

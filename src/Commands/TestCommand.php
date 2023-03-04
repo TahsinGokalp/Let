@@ -2,8 +2,8 @@
 
 namespace TahsinGokalp\Lett\Commands;
 
-use Illuminate\Console\Command;
 use Exception;
+use Illuminate\Console\Command;
 use RuntimeException;
 use TahsinGokalp\Lett\Lett;
 

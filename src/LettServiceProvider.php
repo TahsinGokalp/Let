@@ -3,12 +3,12 @@
 namespace TahsinGokalp\Lett;
 
 use Illuminate\Log\LogManager;
-use TahsinGokalp\Lett\Commands\DoctorCommand;
-use TahsinGokalp\Lett\Commands\TestCommand;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
+use TahsinGokalp\Lett\Commands\DoctorCommand;
+use TahsinGokalp\Lett\Commands\TestCommand;
 use TahsinGokalp\Lett\Http\Client;
 use TahsinGokalp\Lett\Logger\LettHandler;
 

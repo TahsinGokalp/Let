@@ -4,9 +4,8 @@ namespace TahsinGokalp\Lett\Logger;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
-use Monolog\LogRecord;
-use Throwable;
 use TahsinGokalp\Lett\Lett;
+use Throwable;
 
 class LettHandler extends AbstractProcessingHandler
 {

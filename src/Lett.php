@@ -4,7 +4,6 @@ namespace TahsinGokalp\Lett;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\UploadedFile;
@@ -14,9 +13,9 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use JsonException;
+use Psr\Http\Message\ResponseInterface;
 use TahsinGokalp\Lett\Concerns\Lettable;
 use TahsinGokalp\Lett\Http\Client;
-use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class Lett
@@ -110,7 +109,7 @@ class Lett
             return true;
         }
 
-        if (in_array((string)App::environment(), config('lett.environments'), true)) {
+        if (in_array((string) App::environment(), config('lett.environments'), true)) {
             return false;
         }
 
@@ -243,7 +242,7 @@ class Lett
 
     public function isSkipException($exceptionClass): bool
     {
-        return in_array((string)$exceptionClass, config('lett.except'), true);
+        return in_array((string) $exceptionClass, config('lett.except'), true);
     }
 
     public function isSleepingException(array $data): bool
@@ -267,7 +266,7 @@ class Lett
         try {
             return $this->client->report([
                 'exception' => $exception,
-                'user' => $this->getUser(),
+                'user'      => $this->getUser(),
             ]);
         } catch (GuzzleException $e) {
             return null;

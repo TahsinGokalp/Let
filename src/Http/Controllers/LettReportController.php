@@ -2,12 +2,11 @@
 
 namespace TahsinGokalp\Lett\Http\Controllers;
 
+use ErrorException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use TahsinGokalp\Lett\Http\Client;
 use TahsinGokalp\Lett\Lett;
-use ErrorException;
 
 class LettReportController
 {
@@ -16,7 +15,7 @@ class LettReportController
      */
     public function report(Request $request)
     {
-        if(!(bool)config('lett.javascript_reporting')){
+        if (!(bool) config('lett.javascript_reporting')) {
             return response('Javascript reporting disabled', 500);
         }
 
@@ -27,11 +26,11 @@ class LettReportController
             new ErrorException($request->input('message')),
             'javascript',
             [
-                'file' => $request->input('file'),
-                'line' => $request->input('line'),
+                'file'    => $request->input('file'),
+                'line'    => $request->input('line'),
                 'message' => $request->input('message'),
-                'stack' => $request->input('stack'),
-                'url' => $request->input('url'),
+                'stack'   => $request->input('stack'),
+                'url'     => $request->input('url'),
             ]
         );
 

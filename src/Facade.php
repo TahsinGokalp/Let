@@ -2,8 +2,8 @@
 
 namespace TahsinGokalp\Lett;
 
-use TahsinGokalp\Lett\Http\Client;
 use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Http\Client;
 
 /**
  * @method static void assertSent($throwable, $callback = null)

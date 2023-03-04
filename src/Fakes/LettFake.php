@@ -2,13 +2,12 @@
 
 namespace TahsinGokalp\Lett\Fakes;
 
-use TahsinGokalp\Lett\Lett;
 use PHPUnit\Framework\Assert as PHPUnit;
+use TahsinGokalp\Lett\Lett;
 use Throwable;
 
 class LettFake extends Lett
 {
-
     public array $exceptions = [];
 
     public function assertRequestsSent(int $expectedCount): void

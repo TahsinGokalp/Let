@@ -26,9 +26,9 @@ class Client
     /**
      * @throws GuzzleException
      */
-    public function report(array $exception) : PromiseInterface|ResponseInterface|null
+    public function report(array $exception): PromiseInterface|ResponseInterface|null
     {
-        if($this->getGuzzleHttpClient() === null) {
+        if ($this->getGuzzleHttpClient() === null) {
             return null;
         }
 

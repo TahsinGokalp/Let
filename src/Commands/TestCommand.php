@@ -33,7 +33,6 @@ class TestCommand extends Command
                 $this->error('✗ [Lett] Failed to send exception to lett');
             }
         } catch (Exception $ex) {
-            dd($ex->getMessage());
             $this->error("✗ [Lett] Failed to send {$ex->getMessage()}");
         }
 

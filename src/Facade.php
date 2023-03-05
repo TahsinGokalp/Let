@@ -1,13 +1,13 @@
 <?php
 
-namespace Lett;
+namespace TahsinGokalp\Lett;
 
-use Lett\Fakes\LettFake;
-use Lett\Http\Client;
+use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Http\Client;
 
 /**
  * @method static void assertSent($throwable, $callback = null)
- * @method static void assertRequestsSent(int $count)
+ * @method static array requestsSent()
  * @method static void assertNotSent($throwable, $callback = null)
  * @method static void assertNothingSent()
  */

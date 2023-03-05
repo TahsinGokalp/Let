@@ -1,26 +1,21 @@
 <?php
 
-namespace Lett\Tests;
+namespace TahsinGokalp\Lett\Tests;
 
-use Illuminate\Foundation\Application;
-use Lett\ServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
+use TahsinGokalp\Lett\LettServiceProvider;
 
-class TestCase extends \Orchestra\Testbench\TestCase
+class TestCase extends Orchestra
 {
-    /**
-     * Setup the test environment.
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    /**
-     * @param  Application  $app
-     * @return array
-     */
     protected function getPackageProviders($app): array
     {
-        return [ServiceProvider::class];
+        return [
+            LettServiceProvider::class,
+        ];
+    }
+
+    public function getEnvironmentSetUp($app): void
+    {
+        config()->set('database.default', 'testing');
     }
 }

@@ -1,60 +1,49 @@
 <?php
 
-namespace Lett\Commands;
+namespace TahsinGokalp\Lett\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use RuntimeException;
+use TahsinGokalp\Lett\Lett;
 
 class TestCommand extends Command
 {
-    protected $signature = 'lett:test {exception?}';
+    public $signature = 'lett:test';
 
-    protected $description = 'Generate a test exception and send it to lett';
+    public $description = 'Generate a test exception and send it to lett';
 
-    public function handle(): void
+    public function handle(): int
     {
         try {
-            $let = app('lett');
+            /* @var Lett $lett*/
+            $lett = app('lett');
 
-            if (config('lett.login_key')) {
-                $this->info('✓ [Lett] Found login key');
-            } else {
-                $this->error('✗ [Lett] Could not find your login key, set this in your .env');
-            }
-
-            if (config('lett.project_key')) {
-                $this->info('✓ [Lett] Found project key');
-            } else {
-                $this->error('✗ [Lett] Could not find your project key, set this in your .env');
-            }
-
-            if (in_array(config('app.env'), config('lett.environments'))) {
-                $this->info('✓ [Lett] Correct environment found ('.config('app.env').')');
-            } else {
-                $this->error('✗ [Lett] Environment ('.config('app.env').') not allowed to send errors to Let, set this in your config');
-            }
-
-            $response = $let->handle(
+            $response = $lett->handle(
                 $this->generateException()
             );
 
-            if (isset($response->id)) {
-                $this->info('✓ [Lett] Sent exception to Let with ID: '.$response->id);
-            } elseif (is_null($response)) {
-                $this->info('✓ [Lett] Sent exception to Let!');
+            if (is_null($response)) {
+                $this->info('✓ [Lett] Sent exception to lett!');
+            } elseif (!is_bool($response)) {
+                $body = $response->getBody()->getContents();
+                $body = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+                $this->info('✓ [Lett] Sent exception to lett with ID: '.$body['id']);
             } else {
-                $this->error('✗ [Lett] Failed to send exception to Let');
+                $this->error('✗ [Lett] Failed to send exception to lett');
             }
-        } catch (\Exception $ex) {
-            $this->error("✗ [Lett] {$ex->getMessage()}");
+        } catch (Exception $ex) {
+            $this->error("✗ [Lett] Failed to send {$ex->getMessage()}");
         }
+
+        return self::SUCCESS;
     }
 
     public function generateException(): ?Exception
     {
         try {
-            throw new Exception($this->argument('exception') ?? 'This is a test exception from the Lett console');
-        } catch (Exception $ex) {
+            throw new RuntimeException('This is a test exception from the Lett console');
+        } catch (RuntimeException $ex) {
             return $ex;
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lett\Http;
+namespace TahsinGokalp\Lett\Http;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -10,13 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
-    /** @var ClientInterface|null */
     protected ?ClientInterface $client;
 
-    /** @var string */
     protected string $login;
 
-    /** @var string */
     protected string $project;
 
     public function __construct(string $login, string $project, ClientInterface $client = null)
@@ -27,23 +24,24 @@ class Client
     }
 
     /**
-     * @param array $exception
-     * @return PromiseInterface|ResponseInterface|null
-     *
      * @throws GuzzleException
      */
-    public function report(array $exception)
+    public function report(array $exception): PromiseInterface|ResponseInterface|null
     {
+        if ($this->getGuzzleHttpClient() === null) {
+            return null;
+        }
+
         try {
             return $this->getGuzzleHttpClient()->request('POST', config('lett.server'), [
                 'headers' => [
                     'Authorization' => 'Bearer '.$this->login,
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'User-Agent' => 'Let-Package',
+                    'Content-Type'  => 'application/json',
+                    'Accept'        => 'application/json',
+                    'User-Agent'    => 'Lett-Package',
                 ],
                 'json' => array_merge([
-                    'project' => $this->project,
+                    'project'    => $this->project,
                     'additional' => [],
                 ], $exception),
                 'verify' => config('lett.verify_ssl'),
@@ -55,12 +53,9 @@ class Client
         }
     }
 
-    /**
-     * @return \GuzzleHttp\Client
-     */
-    public function getGuzzleHttpClient()
+    public function getGuzzleHttpClient(): \GuzzleHttp\Client|ClientInterface|null
     {
-        if (! isset($this->client)) {
+        if (!isset($this->client)) {
             $this->client = new \GuzzleHttp\Client([
                 'timeout' => 15,
             ]);
@@ -69,10 +64,8 @@ class Client
         return $this->client;
     }
 
-    /**
-     * @return $this
-     */
-    public function setGuzzleHttpClient(ClientInterface $client): Client
+    //TODO : Remove if not used
+    public function setGuzzleHttpClient($client): static
     {
         $this->client = $client;
 

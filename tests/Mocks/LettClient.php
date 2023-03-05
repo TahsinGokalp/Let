@@ -1,11 +1,11 @@
 <?php
 
-namespace Lett\Tests\Mocks;
+namespace TahsinGokalp\Lett\Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Assert;
+use TahsinGokalp\Lett\Http\Client;
 
-class LettClient extends \Lett\Http\Client
+class LettClient extends Client
 {
     public const RESPONSE_ID = 'test';
 
@@ -14,7 +14,10 @@ class LettClient extends \Lett\Http\Client
 
     /**
      * @param array $exception
+     *
      * @throws \JsonException
+     *
+     * @return Response
      */
     public function report(array $exception): Response
     {
@@ -23,8 +26,8 @@ class LettClient extends \Lett\Http\Client
         return new Response(200, [], json_encode(['id' => self::RESPONSE_ID], JSON_THROW_ON_ERROR));
     }
 
-    public function assertRequestsSent(int $expectedCount): void
+    public function requestsSent(): array
     {
-        Assert::assertCount($expectedCount, $this->requests);
+        return $this->requests;
     }
 }

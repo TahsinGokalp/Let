@@ -1,10 +1,15 @@
 # Lett
-Laravel 6.x/7.x/8.x/9.x/10.x package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
+Laravel package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
 
-[![Software License](https://poser.pugx.org/tahsingokalp/lett/license.svg)](LICENSE.md)
 [![Latest Version on Packagist](https://poser.pugx.org/tahsingokalp/lett/v/stable.svg)](https://packagist.org/packages/tahsingokalp/lett)
 [![Build Status](https://github.com/tahsingokalp/lett/workflows/tests/badge.svg)](https://github.com/tahsingokalp/lett/actions)
-[![Total Downloads](https://poser.pugx.org/tahsingokalp/lett/d/total.svg)](https://packagist.org/packages/tahsingokalp/lett)
+[![StyleCI](https://github.styleci.io/repos/607028397/shield?branch=development)](https://github.styleci.io/repos/607028397?branch=development)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=bugs)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
 
 ## Installation on laravel
 You can install the package through Composer.
@@ -14,7 +19,7 @@ composer require tahsingokalp/lett
 
 Then publish the config and migration file of the package using the vendor publish command.
 ```bash
-php artisan vendor:publish --provider="Lett\ServiceProvider"
+php artisan vendor:publish --provider="Lett\LettServiceProvider"
 ```
 And adjust config file (`config/lett.php`) with your desired settings.
 
@@ -43,7 +48,7 @@ In `bootstrap/app.php` you will need to:
     ```
 - Register lett service provider:
     ```php
-    $app->register(Lett\ServiceProvider::class);
+    $app->register(Lett\LettServiceProvider::class);
     ```
 
 ## Configuration variables

@@ -1,48 +1,54 @@
 <?php
 
-namespace Lett\Tests;
+use TahsinGokalp\Lett\Facade;
+use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
-class LoggingTest extends TestCase
-{
-    public function setUp(): void
-    {
-        parent::setUp();
+it('it_will_not_send_log_information_to_lett', function () {
+    config()->set('logging.channels.lett', ['driver' => 'lett']);
+    config()->set('logging.default', 'lett');
+    config()->set('lett.environments', ['testing']);
 
-        \Lett\Facade::fake();
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->app['config']['logging.channels.lett'] = ['driver' => 'lett'];
-        $this->app['config']['logging.default'] = 'lett';
-        $this->app['config']['lett.environments'] = ['testing'];
-    }
+    $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
+        \Illuminate\Support\Facades\Log::{$type}('log');
+    });
 
-    /** @test */
-    public function it_will_not_send_log_information_to_lett(): void
-    {
-        $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
-            \Illuminate\Support\Facades\Log::{$type}('log');
-        });
+    $this->get('/log-information-via-route/debug');
+    $this->get('/log-information-via-route/info');
+    $this->get('/log-information-via-route/notice');
+    $this->get('/log-information-via-route/warning');
+    $this->get('/log-information-via-route/error');
+    $this->get('/log-information-via-route/critical');
+    $this->get('/log-information-via-route/alert');
+    $this->get('/log-information-via-route/emergency');
 
-        $this->get('/log-information-via-route/debug');
-        $this->get('/log-information-via-route/info');
-        $this->get('/log-information-via-route/notice');
-        $this->get('/log-information-via-route/warning');
-        $this->get('/log-information-via-route/error');
-        $this->get('/log-information-via-route/critical');
-        $this->get('/log-information-via-route/alert');
-        $this->get('/log-information-via-route/emergency');
+    expect(count($client->requestsSent()))->toBe(0);
+});
 
-        \Lett\Facade::assertRequestsSent(0);
-    }
+it('it_will_only_send_throwables_to_lett', function () {
+    config()->set('logging.channels.lett', ['driver' => 'lett']);
+    config()->set('logging.default', 'lett');
+    config()->set('lett.environments', ['testing']);
 
-    /** @test */
-    public function it_will_only_send_throwables_to_lett()
-    {
-        $this->app['router']->get('/throwables-via-route', function () {
-            throw new \Exception('exception-via-route');
-        });
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->get('/throwables-via-route');
+    Facade::swap($lett);
 
-        \Lett\Facade::assertRequestsSent(1);
-    }
-}
+    $this->app['router']->get('/throwables-via-route', function () {
+        throw new RuntimeException('exception-via-route');
+    });
+
+    $this->get('/throwables-via-route');
+
+    $total = count($lett->requestsSent());
+
+    expect($total)->toBe(1);
+});

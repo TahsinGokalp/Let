@@ -1,74 +1,48 @@
 <?php
 
-namespace Lett\Tests;
+use TahsinGokalp\Lett\Lett;
+use TahsinGokalp\Lett\Tests\Mocks\CustomerUser;
+use TahsinGokalp\Lett\Tests\Mocks\CustomerUserWithToLett;
+use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Lett\Lett;
-use Lett\Tests\Mocks\LettClient;
+it('it_return_custom_user', function () {
+    $lett = new Lett($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-class UserTest extends TestCase
-{
-    /** @var Mocks\LettClient */
-    protected LettClient $client;
+    $this->actingAs((new CustomerUser())->forceFill([
+        'id'       => 1,
+        'username' => 'username',
+        'password' => 'password',
+        'email'    => 'email',
+    ]));
 
-    /** @var Lett */
-    protected Lett $lett;
+    expect($lett->getUser())->toBe(['id' => 1, 'username' => 'username',
+        'password'                       => 'password', 'email' => 'email', ]);
+});
 
-    public function setUp(): void
-    {
-        parent::setUp();
+it('it_return_custom_user_with_to_lett', function () {
+    $lett = new Lett($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->lett = new Lett($this->client = new LettClient(
-            'login_key',
-            'project_key'
-        ));
-    }
+    $this->actingAs((new CustomerUserWithToLett())->forceFill([
+        'id'       => 1,
+        'username' => 'username',
+        'password' => 'password',
+        'email'    => 'email',
+    ]));
 
-    /** @test */
-    public function it_return_custom_user(): void
-    {
-        $this->actingAs((new CustomerUser())->forceFill([
-            'id' => 1,
-            'username' => 'username',
-            'password' => 'password',
-            'email' => 'email',
-        ]));
+    expect($lett->getUser())->toBe(['username' => 'username', 'email' => 'email']);
+});
 
-        $this->assertSame(['id' => 1, 'username' => 'username', 'password' => 'password', 'email' => 'email'], $this->lett->getUser());
-    }
+it('it_returns_nothing_for_ghost', function () {
+    $lett = new Lett($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-    /** @test */
-    public function it_return_custom_user_with_to_lett(): void
-    {
-        $this->actingAs((new CustomerUserWithToLet())->forceFill([
-            'id' => 1,
-            'username' => 'username',
-            'password' => 'password',
-            'email' => 'email',
-        ]));
-
-        $this->assertSame(['username' => 'username', 'email' => 'email'], $this->lett->getUser());
-    }
-
-    /** @test */
-    public function it_returns_nothing_for_ghost(): void
-    {
-        $this->assertSame(null, $this->lett->getUser());
-    }
-}
-
-class CustomerUser extends AuthUser
-{
-    protected $guarded = [];
-}
-
-class CustomerUserWithToLet extends CustomerUser implements \Lett\Concerns\Lettable
-{
-    public function toLett()
-    {
-        return [
-            'username' => $this->username,
-            'email' => $this->email,
-        ];
-    }
-}
+    expect($lett->getUser())->toBeNull();
+});

@@ -47,7 +47,7 @@ it('is_will_not_crash_if_let_returns_normal_exception', function () {
 });
 
 it('it_can_skip_exceptions_based_on_class', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -62,7 +62,7 @@ it('it_can_skip_exceptions_based_on_class', function () {
 });
 
 it('it_can_skip_exceptions_based_on_environment', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -81,7 +81,7 @@ it('it_can_skip_exceptions_based_on_environment', function () {
 });
 
 it('it_will_return_false_for_sleeping_cache_exception_if_disabled', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -92,7 +92,7 @@ it('it_will_return_false_for_sleeping_cache_exception_if_disabled', function () 
 });
 
 it('it_can_check_if_is_a_sleeping_cache_exception', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -121,7 +121,7 @@ it('it_can_check_if_is_a_sleeping_cache_exception', function () {
 });
 
 it('it_can_get_formatted_exception_data', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -138,7 +138,7 @@ it('it_can_get_formatted_exception_data', function () {
 });
 
 it('it_filters_the_data_based_on_the_configuration', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -163,7 +163,7 @@ it('it_filters_the_data_based_on_the_configuration', function () {
 });
 
 it('it_can_report_an_exception_to_lett', function () {
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));

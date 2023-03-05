@@ -1,84 +1,98 @@
-# Error reporting tool for laravel
+# Lett
+Laravel package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/tahsingokalp/lett.svg?style=flat-square)](https://packagist.org/packages/tahsingokalp/lett)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/tahsingokalp/lett/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/tahsingokalp/lett/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/tahsingokalp/lett/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/tahsingokalp/lett/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/tahsingokalp/lett.svg?style=flat-square)](https://packagist.org/packages/tahsingokalp/lett)
+[![Latest Version on Packagist](https://poser.pugx.org/tahsingokalp/lett/v/stable.svg)](https://packagist.org/packages/tahsingokalp/lett)
+[![Build Status](https://github.com/tahsingokalp/lett/workflows/tests/badge.svg)](https://github.com/tahsingokalp/lett/actions)
+[![StyleCI](https://github.styleci.io/repos/607028397/shield?branch=development)](https://github.styleci.io/repos/607028397?branch=development)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=bugs)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/Lett.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/Lett)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
+## Installation on laravel
+You can install the package through Composer.
 ```bash
 composer require tahsingokalp/lett
 ```
 
-You can publish and run the migrations with:
-
+Then publish the config and migration file of the package using the vendor publish command.
 ```bash
-php artisan vendor:publish --tag="lett-migrations"
-php artisan migrate
+php artisan vendor:publish --provider="Lett\LettServiceProvider"
+```
+And adjust config file (`config/lett.php`) with your desired settings.
+
+Note: by default only production environments will report errors. To modify this edit your Let configuration.
+
+## Installation on lumen
+You can install the package through Composer.
+```bash
+composer require tahsingokalp/lett
 ```
 
-You can publish the config file with:
-
+Copy the config file (`lett.php`) to lumen config directory.
 ```bash
-php artisan vendor:publish --tag="lett-config"
+php -r "file_exists('config/') || mkdir('config/'); copy('vendor/tahsingokalp/lett/config/lett.php', 'config/lett.php');"
 ```
+And adjust config file (`config/lett.php`) with your desired settings.
 
-This is the contents of the published config file:
+In `bootstrap/app.php` you will need to:
+- Uncomment this line:
+    ```php
+    $app->withFacades();
+    ```
+- Register the lett config file:
+    ```php
+    $app->configure('lett');
+    ```
+- Register lett service provider:
+    ```php
+    $app->register(Lett\LettServiceProvider::class);
+    ```
 
+## Configuration variables
+All that is left to do is to define two env configuration variables.
+```
+LETT_KEY=
+LETT_PROJECT_KEY=
+```
+`LETT_KEY` is your profile key which authorises your account to the API.
+
+`LETT_PROJECT_KEY` is your project API key which you've received when creating a project.
+
+Install lett-tracker to your host and get the variables
+
+## Reporting unhandled exceptions
+You can use lett as a log-channel by adding the following config to the `channels` section in `config/logging.php`:
 ```php
-return [
-];
+'channels' => [
+    // ...
+    'lett' => [
+        'driver' => 'lett',
+    ],
+],
 ```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="lett-views"
-```
-
-## Usage
-
+After that you can add it to the stack section:
 ```php
-$lett = new TahsinGokalp\Lett();
-echo $lett->echoPhrase('Hello, TahsinGokalp!');
+'channels' => [
+    'stack' => [
+        'driver' => 'stack',
+        'channels' => ['single', 'lett'],
+    ],
+    //...
+],
 ```
 
-## Testing
-
+PS: If you're using lumen, it could be that you don't have the `logging.php` file. So, you can use default logging file from
+framework core and make changes above.
 ```bash
-composer test
+php -r "file_exists('config/') || mkdir('config/'); copy('vendor/laravel/lumen-framework/config/logging.php', 'config/logging.php');"
 ```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [Tahsin Gökalp Şaan](https://github.com/TahsinGokalp)
-- [All Contributors](../../contributors)
 
 ## License
+The Let package is open source software licensed under the [license MIT](http://opensource.org/licenses/MIT)
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+## Special Thanks
+
+This repo forked from https://github.com/LaraBug/LaraBug - https://github.com/Cannonb4ll

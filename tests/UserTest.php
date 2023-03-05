@@ -6,7 +6,7 @@ use TahsinGokalp\Lett\Tests\Mocks\CustomerUserWithToLett;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 it('it_return_custom_user', function () {
-    $lett = new Lett($client = new LettClient(
+    $lett = new Lett(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -23,7 +23,7 @@ it('it_return_custom_user', function () {
 });
 
 it('it_return_custom_user_with_to_lett', function () {
-    $lett = new Lett($client = new LettClient(
+    $lett = new Lett(new LettClient(
         'login_key',
         'project_key'
     ));
@@ -39,7 +39,7 @@ it('it_return_custom_user_with_to_lett', function () {
 });
 
 it('it_returns_nothing_for_ghost', function () {
-    $lett = new Lett($client = new LettClient(
+    $lett = new Lett(new LettClient(
         'login_key',
         'project_key'
     ));

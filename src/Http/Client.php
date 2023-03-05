@@ -64,7 +64,6 @@ class Client
         return $this->client;
     }
 
-    //TODO : Remove if not used
     public function setGuzzleHttpClient($client): static
     {
         $this->client = $client;

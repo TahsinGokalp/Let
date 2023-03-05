@@ -9,7 +9,7 @@ it('it_will_not_send_log_information_to_lett', function () {
     config()->set('logging.default', 'lett');
     config()->set('lett.environments', ['testing']);
 
-    $lett = new LettFake($client = new LettClient(
+    new LettFake($client = new LettClient(
         'login_key',
         'project_key'
     ));
@@ -35,7 +35,7 @@ it('it_will_only_send_throwables_to_lett', function () {
     config()->set('logging.default', 'lett');
     config()->set('lett.environments', ['testing']);
 
-    $lett = new LettFake($client = new LettClient(
+    $lett = new LettFake(new LettClient(
         'login_key',
         'project_key'
     ));

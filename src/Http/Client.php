@@ -65,7 +65,7 @@ class Client
     }
 
     //TODO : Remove if not used
-    public function setGuzzleHttpClient(ClientInterface $client): static
+    public function setGuzzleHttpClient($client): static
     {
         $this->client = $client;
 

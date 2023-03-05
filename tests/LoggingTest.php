@@ -9,10 +9,10 @@ it('it_will_not_send_log_information_to_lett', function () {
     config()->set('logging.default', 'lett');
     config()->set('lett.environments', ['testing']);
 
-    new LettFake($client = new LettClient(
+    $client = new LettClient(
         'login_key',
         'project_key'
-    ));
+    );
 
     $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
         \Illuminate\Support\Facades\Log::{$type}('log');

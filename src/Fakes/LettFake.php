@@ -1,24 +1,23 @@
 <?php
 
-namespace Lett\Fakes;
+namespace TahsinGokalp\Lett\Fakes;
 
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert as PHPUnit;
+use TahsinGokalp\Lett\Lett;
+use TahsinGokalp\Lett\Tests\Mocks\LettClient;
+use Throwable;
 
-class LettFake extends \Lett\Lett
+class LettFake extends Lett
 {
-    /** @var array */
     public array $exceptions = [];
 
-    public function assertRequestsSent(int $expectedCount): void
+    public function requestsSent(): array
     {
-        PHPUnit::assertCount($expectedCount, $this->exceptions);
+        return $this->exceptions;
     }
 
-    /**
-     * @param mixed         $throwable
-     * @param callable|null $callback
-     */
-    public function assertNotSent($throwable, callable $callback = null): void
+    public function assertNotSent(mixed $throwable, callable $callback = null): void
     {
         $collect = collect($this->exceptions[$throwable] ?? []);
 
@@ -38,11 +37,7 @@ class LettFake extends \Lett\Lett
         PHPUnit::assertCount(0, $this->exceptions);
     }
 
-    /**
-     * @param mixed         $throwable
-     * @param callable|null $callback
-     */
-    public function assertSent($throwable, callable $callback = null): void
+    public function assertSent(mixed $throwable, callable $callback = null): void
     {
         $collect = collect($this->exceptions[$throwable] ?? []);
 
@@ -57,8 +52,13 @@ class LettFake extends \Lett\Lett
         PHPUnit::assertTrue($filtered->count() > 0);
     }
 
-    public function handle(\Throwable $exception, $fileType = 'php', array $customData = []): void
+    /**
+     * @throws \JsonException
+     */
+    public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
     {
         $this->exceptions[get_class($exception)][] = $exception;
+
+        return new Response(200, [], json_encode(['id' => LettClient::RESPONSE_ID], JSON_THROW_ON_ERROR));
     }
 }

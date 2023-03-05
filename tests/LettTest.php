@@ -1,184 +1,176 @@
 <?php
 
-namespace Lett\Tests;
-
 use Carbon\Carbon;
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Lett\Fakes\LettFake;
-use Lett\Lett;
-use Lett\Tests\Mocks\LettClient;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
-class LettTest extends TestCase
-{
-    /** @var LettFake */
-    protected LettFake $lett;
+it('is_will_not_crash_if_let_returns_error_bad_response_exception', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-    /** @var Mocks\LettClient */
-    protected LettClient $client;
+    config()->set('lett.environments', ['testing']);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    $client->setGuzzleHttpClient(new Client([
+        'handler' => MockHandler::createWithMiddleware([
+            new Response(500, [], '{}'),
+        ]),
+    ]));
 
-        $this->lett = new LettFake($this->client = new LettClient(
-            'login_key',
-            'project_key'
-        ));
-    }
+    expect($lett->handle(
+        new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')
+    )->getStatusCode())->toBe(200);
+});
 
-    /** @test */
-    public function is_will_not_crash_if_let_returns_error_bad_response_exception(): void
-    {
-        $lett = new Lett($this->client = new LettClient(
-            'login_key',
-            'project_key'
-        ));
+it('is_will_not_crash_if_let_returns_normal_exception', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->app['config']['lett.environments'] = ['testing'];
+    config()->set('lett.environments', ['testing']);
 
-        $this->client->setGuzzleHttpClient(new Client([
-            'handler' => MockHandler::createWithMiddleware([
-                new Response(500, [], '{}'),
-            ]),
-        ]));
+    $client->setGuzzleHttpClient(new Client([
+        'handler' => MockHandler::createWithMiddleware([
+            new Exception(),
+        ]),
+    ]));
 
-        $this->assertInstanceOf(get_class(new \stdClass()), $lett->handle(
-            new Exception('is_will_not_crash_if_let_returns_error_bad_response_exception')
-        ));
-    }
+    expect($lett->handle(
+        new Exception('is_will_not_crash_if_let_returns_normal_exception')
+    )->getStatusCode())->toBe(200);
+});
 
-    /** @test */
-    public function is_will_not_crash_if_let_returns_normal_exception(): void
-    {
-        $lett = new Lett($this->client = new LettClient(
-            'login_key',
-            'project_key'
-        ));
+it('it_can_skip_exceptions_based_on_class', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->app['config']['let.environments'] = ['testing'];
+    config()->set('lett.except', []);
 
-        $this->client->setGuzzleHttpClient(new Client([
-            'handler' => MockHandler::createWithMiddleware([
-                new Exception(),
-            ]),
-        ]));
+    expect($lett->isSkipException(NotFoundHttpException::class))->toBe(false);
 
-        $this->assertFalse($lett->handle(new Exception('is_will_not_crash_if_let_returns_normal_exception')));
-    }
+    config()->set('lett.except', [NotFoundHttpException::class]);
 
-    /** @test */
-    public function it_can_skip_exceptions_based_on_class(): void
-    {
-        $this->app['config']['lett.except'] = [];
+    expect($lett->isSkipException(NotFoundHttpException::class))->toBe(true);
+});
 
-        $this->assertFalse($this->lett->isSkipException(NotFoundHttpException::class));
+it('it_can_skip_exceptions_based_on_environment', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->app['config']['lett.except'] = [
-            NotFoundHttpException::class,
-        ];
+    config()->set('lett.environments', []);
 
-        $this->assertTrue($this->lett->isSkipException(NotFoundHttpException::class));
-    }
+    expect($lett->isSkipEnvironment())->toBe(true);
 
-    /** @test */
-    public function it_can_skip_exceptions_based_on_environment(): void
-    {
-        $this->app['config']['lett.environments'] = [];
+    config()->set('lett.environments', ['production']);
 
-        $this->assertTrue($this->lett->isSkipEnvironment());
+    expect($lett->isSkipEnvironment())->toBe(true);
 
-        $this->app['config']['lett.environments'] = ['production'];
+    config()->set('lett.environments', ['testing']);
 
-        $this->assertTrue($this->lett->isSkipEnvironment());
+    expect($lett->isSkipEnvironment())->toBe(false);
+});
 
-        $this->app['config']['lett.environments'] = ['testing'];
+it('it_will_return_false_for_sleeping_cache_exception_if_disabled', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->assertFalse($this->lett->isSkipEnvironment());
-    }
+    config()->set('lett.sleep', 0);
 
-    /** @test */
-    public function it_will_return_false_for_sleeping_cache_exception_if_disabled(): void
-    {
-        $this->app['config']['lett.sleep'] = 0;
+    expect($lett->isSleepingException([]))->toBe(false);
+});
 
-        $this->assertFalse($this->lett->isSleepingException([]));
-    }
+it('it_can_check_if_is_a_sleeping_cache_exception', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-    /** @test */
-    public function it_can_check_if_is_a_sleeping_cache_exception(): void
-    {
-        $data = ['host' => 'localhost', 'method' => 'GET',
-            'exception' => 'it_can_check_if_is_a_sleeping_cache_exception',
-            'line'      => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception', ];
+    $data = ['host' => 'localhost', 'method' => 'GET',
+        'exception' => 'it_can_check_if_is_a_sleeping_cache_exception',
+        'line'      => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception', ];
 
-        Carbon::setTestNow('2019-10-12 13:30:00');
+    Carbon::setTestNow('2019-10-12 13:30:00');
 
-        $this->assertFalse($this->lett->isSleepingException($data));
+    expect($lett->isSleepingException($data))->toBe(false);
 
-        Carbon::setTestNow('2019-10-12 13:30:00');
+    Carbon::setTestNow('2019-10-12 13:30:00');
 
-        $this->lett->addExceptionToSleep($data);
+    $lett->addExceptionToSleep($data);
 
-        $this->assertTrue($this->lett->isSleepingException($data));
+    expect($lett->isSleepingException($data))->toBe(true);
 
-        Carbon::setTestNow('2019-10-12 13:31:00');
+    Carbon::setTestNow('2019-10-12 13:31:00');
 
-        $this->assertTrue($this->lett->isSleepingException($data));
+    expect($lett->isSleepingException($data))->toBe(true);
 
-        Carbon::setTestNow('2019-10-12 13:31:01');
+    Carbon::setTestNow('2019-10-12 13:31:01');
 
-        $this->assertFalse($this->lett->isSleepingException($data));
-    }
+    expect($lett->isSleepingException($data))->toBe(false);
+});
 
-    /** @test */
-    public function it_can_get_formatted_exception_data(): void
-    {
-        $data = $this->lett->getExceptionData(new Exception(
-            'it_can_get_formatted_exception_data'
-        ));
+it('it_can_get_formatted_exception_data', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->assertSame('testing', $data['environment']);
-        $this->assertSame('localhost', $data['host']);
-        $this->assertSame('GET', $data['method']);
-        $this->assertSame('http://localhost', $data['fullUrl']);
-        $this->assertSame('it_can_get_formatted_exception_data', $data['exception']);
+    $data = $lett->getExceptionData(new Exception(
+        'it_can_get_formatted_exception_data'
+    ));
 
-        $this->assertCount(13, $data);
-    }
+    expect($data['environment'])->toBe('testing')
+        ->and($data['host'])->toBe('localhost')
+        ->and($data['method'])->toBe('GET')
+        ->and($data['fullUrl'])->toBe('http://localhost')
+        ->and($data['exception'])->toBe('it_can_get_formatted_exception_data');
+});
 
-    /** @test */
-    public function it_filters_the_data_based_on_the_configuration(): void
-    {
-        $this->assertContains('*password*', $this->app['config']['lett.blacklist']);
+it('it_filters_the_data_based_on_the_configuration', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $data = [
-            'password'      => 'testing',
-            'not_password'  => 'testing',
-            'not_password2' => [
+    expect(config()->get('lett.blacklist'))->toContain('*password*');
+
+    $data = [
+        'password'      => 'testing',
+        'not_password'  => 'testing',
+        'not_password2' => [
+            'password' => 'testing',
+        ],
+        'not_password_3' => [
+            'nah' => [
                 'password' => 'testing',
             ],
-            'not_password_3' => [
-                'nah' => [
-                    'password' => 'testing',
-                ],
-            ],
-            'Password' => 'testing',
-        ];
+        ],
+        'Password' => 'testing',
+    ];
 
-        $this->assertContains('***', $this->lett->filterVariables($data));
-    }
+    expect($lett->filterVariables($data))->toContain('***');
+});
 
-    /** @test */
-    public function it_can_report_an_exception_to_lett(): void
-    {
-        $this->app['config']['lett.environments'] = ['testing'];
+it('it_can_report_an_exception_to_lett', function () {
+    $lett = new LettFake($client = new LettClient(
+        'login_key',
+        'project_key'
+    ));
 
-        $this->lett->handle(new Exception('it_can_report_an_exception_to_lett'));
+    config()->set('lett.environments', ['testing']);
 
-        $this->client->assertRequestsSent(1);
-    }
-}
+    $lett->handle(new Exception('it_can_report_an_exception_to_lett'));
+
+    expect(count($lett->requestsSent()))->toBe(1);
+});

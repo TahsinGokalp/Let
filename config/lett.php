@@ -11,7 +11,7 @@ return [
    |
    */
 
-    'server' => env('L_SERVER', 'https://log.tahsingokalp.dev/api/log'),
+    'server' => env('L_SERVER', 'https://tahsingokalp.dev/api/log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -129,5 +129,16 @@ return [
     |
     */
     'verify_ssl' => env('LETT_VERIFY_SSL', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Javascript settings
+    |--------------------------------------------------------------------------
+    |
+    | This setting allows you to disable/enable javascript reporting.
+    |
+    */
+
+    'javascript_reporting' => env('L_JAVASCRIPT_REPORTING', false),
 
 ];

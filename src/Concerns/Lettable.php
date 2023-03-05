@@ -1,6 +1,6 @@
 <?php
 
-namespace Lett\Concerns;
+namespace TahsinGokalp\Lett\Concerns;
 
 interface Lettable
 {

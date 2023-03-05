@@ -1,14 +1,16 @@
 <?php
 
-namespace Lett;
+namespace TahsinGokalp\Lett;
 
+use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Lett\Commands\DoctorCommand;
-use Lett\Commands\TestCommand;
-use Lett\Logger\LettHandler;
 use Monolog\Logger;
+use TahsinGokalp\Lett\Commands\DoctorCommand;
+use TahsinGokalp\Lett\Commands\TestCommand;
+use TahsinGokalp\Lett\Http\Client;
+use TahsinGokalp\Lett\Logger\LettHandler;
 
 class LettServiceProvider extends BaseServiceProvider
 {
@@ -54,13 +56,13 @@ class LettServiceProvider extends BaseServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/lett.php', 'lett');
 
         $this->app->singleton('lett', function () {
-            return new Lett(new \Lett\Http\Client(
+            return new Lett(new Client(
                 config('lett.login_key', 'login_key'),
                 config('lett.project_key', 'project_key')
             ));
         });
 
-        if ($this->app['log'] instanceof \Illuminate\Log\LogManager) {
+        if ($this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('lett', function ($app) {
                 $handler = new LettHandler(
                     $app['lett']
@@ -75,7 +77,6 @@ class LettServiceProvider extends BaseServiceProvider
     {
         Route::group(
             [
-                'namespace' => '\Lett\Http\Controllers',
                 'prefix'    => 'lett-api',
             ],
             static function () {

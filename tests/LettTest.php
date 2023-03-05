@@ -1,11 +1,10 @@
 <?php
 
 use Carbon\Carbon;
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TahsinGokalp\Lett\Facade;
 use TahsinGokalp\Lett\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
@@ -57,7 +56,7 @@ it('it_can_skip_exceptions_based_on_class', function () {
 
     expect($lett->isSkipException(NotFoundHttpException::class))->toBe(false);
 
-    config()->set('lett.except', [NotFoundHttpException::class,]);
+    config()->set('lett.except', [NotFoundHttpException::class]);
 
     expect($lett->isSkipException(NotFoundHttpException::class))->toBe(true);
 });

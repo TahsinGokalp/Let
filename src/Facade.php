@@ -6,10 +6,10 @@ use TahsinGokalp\Lett\Fakes\LettFake;
 use TahsinGokalp\Lett\Http\Client;
 
 /**
- * @method static void assertSent($throwable, $callback = null)
+ * @method static void  assertSent($throwable, $callback = null)
  * @method static array requestsSent()
- * @method static void assertNotSent($throwable, $callback = null)
- * @method static void assertNothingSent()
+ * @method static void  assertNotSent($throwable, $callback = null)
+ * @method static void  assertNothingSent()
  */
 class Facade extends \Illuminate\Support\Facades\Facade
 {

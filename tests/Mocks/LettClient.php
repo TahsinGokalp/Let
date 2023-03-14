@@ -7,7 +7,6 @@ use TahsinGokalp\Lett\Http\Client;
 
 class LettClient extends Client
 {
-
     protected array $requests = [];
 
     /**

@@ -5,7 +5,6 @@ namespace TahsinGokalp\Lett\Fakes;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert as PHPUnit;
 use TahsinGokalp\Lett\Lett;
-use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 use Throwable;
 
 class LettFake extends Lett

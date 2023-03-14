@@ -59,6 +59,6 @@ class LettFake extends Lett
     {
         $this->exceptions[get_class($exception)][] = $exception;
 
-        return new Response(200, [], json_encode(['id' => LettClient::RESPONSE_ID], JSON_THROW_ON_ERROR));
+        return new Response(200, [], json_encode(['OK'], JSON_THROW_ON_ERROR));
     }
 }

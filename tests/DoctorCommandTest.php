@@ -55,6 +55,6 @@ it('it_detects_that_it_fails_to_send_to_lett', function () {
     \TahsinGokalp\Lett\Facade::swap($lett);
 
     $this->artisan('lett:test')
-        ->expectsOutput('✓ [Lett] Sent exception to lett with ID: '.LettClient::RESPONSE_ID)
+        ->expectsOutput('✓ [Lett] Sent exception to lett!')
         ->assertExitCode(0);
 });

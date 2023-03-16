@@ -3,6 +3,7 @@
 namespace TahsinGokalp\Lett\Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
+use JsonException;
 use TahsinGokalp\Lett\Http\Client;
 
 class LettClient extends Client
@@ -10,11 +11,7 @@ class LettClient extends Client
     protected array $requests = [];
 
     /**
-     * @param array $exception
-     *
-     * @throws \JsonException
-     *
-     * @return Response
+     * @throws JsonException
      */
     public function report(array $exception): Response
     {

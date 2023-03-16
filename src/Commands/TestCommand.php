@@ -25,7 +25,7 @@ class TestCommand extends Command
 
             if (is_null($response)) {
                 $this->info('✓ [Lett] Sent exception to lett!');
-            } elseif (!is_bool($response)) {
+            } elseif (! is_bool($response)) {
                 $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
                 if ($response[0] === 'OK') {
                     $this->info('✓ [Lett] Sent exception to lett!');

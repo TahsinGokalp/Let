@@ -3,6 +3,7 @@
 namespace TahsinGokalp\Lett\Fakes;
 
 use GuzzleHttp\Psr7\Response;
+use JsonException;
 use PHPUnit\Framework\Assert as PHPUnit;
 use TahsinGokalp\Lett\Lett;
 use Throwable;
@@ -52,7 +53,7 @@ class LettFake extends Lett
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
     {

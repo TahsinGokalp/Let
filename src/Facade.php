@@ -15,8 +15,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Replace the bound instance with a fake.
-     *
-     * @return void
      */
     public static function fake(): void
     {
@@ -25,8 +23,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
 
     /**
      * Get the registered name of the component.
-     *
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {

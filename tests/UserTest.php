@@ -11,15 +11,15 @@ it('it_return_custom_user', function () {
         'project_key'
     ));
 
-    $this->actingAs((new CustomerUser())->forceFill([
-        'id'       => 1,
+    $this->actingAs((new CustomerUser)->forceFill([
+        'id' => 1,
         'username' => 'username',
         'password' => 'password',
-        'email'    => 'email',
+        'email' => 'email',
     ]));
 
     expect($lett->getUser())->toBe(['id' => 1, 'username' => 'username',
-        'password'                       => 'password', 'email' => 'email', ]);
+        'password' => 'password', 'email' => 'email', ]);
 });
 
 it('it_return_custom_user_with_to_lett', function () {
@@ -28,11 +28,11 @@ it('it_return_custom_user_with_to_lett', function () {
         'project_key'
     ));
 
-    $this->actingAs((new CustomerUserWithToLett())->forceFill([
-        'id'       => 1,
+    $this->actingAs((new CustomerUserWithToLett)->forceFill([
+        'id' => 1,
         'username' => 'username',
         'password' => 'password',
-        'email'    => 'email',
+        'email' => 'email',
     ]));
 
     expect($lett->getUser())->toBe(['username' => 'username', 'email' => 'email']);

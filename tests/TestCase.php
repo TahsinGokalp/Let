@@ -7,15 +7,15 @@ use TahsinGokalp\Lett\LettServiceProvider;
 
 class TestCase extends Orchestra
 {
+    public function getEnvironmentSetUp($app): void
+    {
+        config()->set('database.default', 'testing');
+    }
+
     protected function getPackageProviders($app): array
     {
         return [
             LettServiceProvider::class,
         ];
-    }
-
-    public function getEnvironmentSetUp($app): void
-    {
-        config()->set('database.default', 'testing');
     }
 }

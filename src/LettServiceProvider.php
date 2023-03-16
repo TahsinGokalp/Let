@@ -20,7 +20,7 @@ class LettServiceProvider extends BaseServiceProvider
         // Publish configuration file
         if (function_exists('config_path')) {
             $this->publishes([
-                __DIR__.'/../config/lett.php' => config_path('lett.php'),
+                __DIR__ . '/../config/lett.php' => config_path('lett.php'),
             ]);
         }
 
@@ -42,7 +42,7 @@ class LettServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/lett.php', 'lett');
+        $this->mergeConfigFrom(__DIR__ . '/../config/lett.php', 'lett');
 
         $this->app->singleton('lett', function () {
             return new Lett(new Client(

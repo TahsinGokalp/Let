@@ -5,6 +5,10 @@ on:
     paths:
       - '**.php'
       - 'phpstan.neon.dist'
+  workflow_run:
+    workflows: [ "Duster Fix" ]
+    types:
+      - completed
 
 jobs:
   phpstan:

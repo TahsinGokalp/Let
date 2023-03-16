@@ -3,8 +3,6 @@
 namespace TahsinGokalp\Lett;
 
 use Illuminate\Log\LogManager;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
 use TahsinGokalp\Lett\Commands\DoctorCommand;

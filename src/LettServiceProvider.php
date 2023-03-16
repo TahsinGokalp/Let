@@ -26,9 +26,6 @@ class LettServiceProvider extends BaseServiceProvider
             ]);
         }
 
-        // Register views
-        $this->app['view']->addNamespace('lett', __DIR__.'/../resources/views');
-
         // Register facade
         if (class_exists(\Illuminate\Foundation\AliasLoader::class)) {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
@@ -40,12 +37,6 @@ class LettServiceProvider extends BaseServiceProvider
             TestCommand::class,
             DoctorCommand::class,
         ]);
-
-        // Map any routes
-        $this->mapLettApiRoutes();
-
-        // Create an alias to the lett-js-client.blade.php include
-        Blade::include('lett::lett-js-client', 'lettJavaScriptClient');
     }
 
     /**
@@ -71,17 +62,5 @@ class LettServiceProvider extends BaseServiceProvider
                 return new Logger('let', [$handler]);
             });
         }
-    }
-
-    protected function mapLettApiRoutes(): void
-    {
-        Route::group(
-            [
-                'prefix'    => 'lett-api',
-            ],
-            static function () {
-                require_once __DIR__.'/../routes/api.php';
-            }
-        );
     }
 }

@@ -22,7 +22,7 @@ composer require tahsingokalp/lett
 
 Then publish the config and migration file of the package using the vendor publish command.
 ```bash
-php artisan vendor:publish --provider="Lett\LettServiceProvider"
+php artisan vendor:publish --provider="TahsinGokalp\Lett\LettServiceProvider"
 ```
 And adjust config file (`config/lett.php`) with your desired settings.
 

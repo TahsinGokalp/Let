@@ -1,6 +1,6 @@
 <?php
 
-namespace TahsinGokalp\Lett\Fakes;
+namespace TahsinGokalp\Lett\Tests\Fakes;
 
 use GuzzleHttp\Psr7\Response;
 use JsonException;

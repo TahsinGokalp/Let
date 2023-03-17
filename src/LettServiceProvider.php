@@ -2,6 +2,7 @@
 
 namespace TahsinGokalp\Lett;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
@@ -12,9 +13,7 @@ use TahsinGokalp\Lett\Logger\LettHandler;
 
 class LettServiceProvider extends BaseServiceProvider
 {
-    /**
-     * Bootstrap the application events.
-     */
+
     public function boot(): void
     {
         // Publish configuration file
@@ -25,9 +24,9 @@ class LettServiceProvider extends BaseServiceProvider
         }
 
         // Register facade
-        if (class_exists(\Illuminate\Foundation\AliasLoader::class)) {
-            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('Lett', Facade::class);
+        if (class_exists(AliasLoader::class)) {
+            $loader = AliasLoader::getInstance();
+            $loader->alias('Lett', \TahsinGokalp\Lett\Facades\Lett::class);
         }
 
         // Register commands
@@ -37,10 +36,7 @@ class LettServiceProvider extends BaseServiceProvider
         ]);
     }
 
-    /**
-     * Register the service provider.
-     */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/lett.php', 'lett');
 

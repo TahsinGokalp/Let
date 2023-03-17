@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 it('is_will_not_crash_if_let_returns_error_bad_response_exception', function () {

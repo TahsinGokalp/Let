@@ -57,7 +57,7 @@ return [
     | For git repository: shell_exec("git log -1 --pretty=format:'%h' --abbrev-commit")
     |
     */
-    'project_version' => env('LETT_PROJECT_VERSION', null),
+    'project_version' => env('LETT_PROJECT_VERSION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     */
 
     'except' => [
-        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+        Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
     ],
 
     /*

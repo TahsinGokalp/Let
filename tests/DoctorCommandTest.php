@@ -1,6 +1,6 @@
 <?php
 
-use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 it('it_detects_if_the_login_key_is_set', function () {
@@ -52,7 +52,7 @@ it('it_detects_that_it_fails_to_send_to_lett', function () {
         'project_key'
     ));
 
-    \TahsinGokalp\Lett\Facade::swap($lett);
+    \TahsinGokalp\Lett\LettFacade::swap($lett);
 
     $this->artisan('lett:test')
         ->expectsOutput('✓ [Lett] Sent exception to lett!')

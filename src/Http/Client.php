@@ -2,6 +2,7 @@
 
 namespace TahsinGokalp\Lett\Http;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -35,27 +36,27 @@ class Client
         try {
             return $this->getGuzzleHttpClient()->request('POST', config('lett.server'), [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$this->login,
-                    'Content-Type'  => 'application/json',
-                    'Accept'        => 'application/json',
-                    'User-Agent'    => 'Lett-Package',
+                    'Authorization' => 'Bearer ' . $this->login,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'User-Agent' => 'Lett-Package',
                 ],
                 'json' => array_merge([
-                    'project'    => $this->project,
+                    'project' => $this->project,
                     'additional' => [],
                 ], $exception),
                 'verify' => config('lett.verify_ssl'),
             ]);
         } catch (RequestException $e) {
             return $e->getResponse();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
 
     public function getGuzzleHttpClient(): \GuzzleHttp\Client|ClientInterface|null
     {
-        if (!isset($this->client)) {
+        if (! isset($this->client)) {
             $this->client = new \GuzzleHttp\Client([
                 'timeout' => 15,
             ]);

@@ -3,14 +3,21 @@
 namespace TahsinGokalp\Lett\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use TahsinGokalp\Lett\Tests\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 /**
  * @see \TahsinGokalp\Lett\Lett
  */
 class Lett extends Facade
 {
-    protected static function getFacadeAccessor()
+    public static function fake(): void
     {
-        return \TahsinGokalp\Lett\Lett::class;
+        static::swap(new LettFake(new LettClient('login_key', 'project_key')));
+    }
+
+    protected static function getFacadeAccessor(): string
+    {
+        return 'lett';
     }
 }

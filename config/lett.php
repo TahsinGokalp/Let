@@ -11,7 +11,7 @@ return [
    |
    */
 
-    'server' => env('L_SERVER', 'https://tahsingokalp.dev/api/log'),
+    'server' => env('LETT_SERVER', 'https://tahsingokalp.dev/api/log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ return [
     | For git repository: shell_exec("git log -1 --pretty=format:'%h' --abbrev-commit")
     |
     */
-    'project_version' => null,
+    'project_version' => env('LETT_PROJECT_VERSION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'lines_count' => 12,
+    'lines_count' => env('LETT_LINES_COUNT', 12),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return [
     |
     */
 
-    'sleep' => 60,
+    'sleep' => env('LETT_SLEEP', 60),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     */
 
     'except' => [
-        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+        Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
     ],
 
     /*
@@ -101,7 +101,7 @@ return [
     | Key filtering
     |--------------------------------------------------------------------------
     |
-    | Filter out these variables before sending them to LaraBug
+    | Filter out these variables before sending them to Lett
     |
     */
 
@@ -112,7 +112,7 @@ return [
         '*auth*',
         '*verification*',
         '*credit_card*',
-        'cardToken', // mollie card token
+        'cardToken',
         '*cvv*',
         '*iban*',
         '*name*',
@@ -124,21 +124,10 @@ return [
     | Verify SSL setting
     |--------------------------------------------------------------------------
     |
-    | Enables / disables the SSL verification when sending exceptions to LaraBug
+    | Enables / disables the SSL verification when sending exceptions to Lett
     | Never turn SSL verification off on production instances
     |
     */
     'verify_ssl' => env('LETT_VERIFY_SSL', true),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Javascript settings
-    |--------------------------------------------------------------------------
-    |
-    | This setting allows you to disable/enable javascript reporting.
-    |
-    */
-
-    'javascript_reporting' => env('L_JAVASCRIPT_REPORTING', false),
 
 ];

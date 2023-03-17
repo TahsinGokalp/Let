@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 it('is_will_not_crash_if_let_returns_error_bad_response_exception', function () {
@@ -37,7 +37,7 @@ it('is_will_not_crash_if_let_returns_normal_exception', function () {
 
     $client->setGuzzleHttpClient(new Client([
         'handler' => MockHandler::createWithMiddleware([
-            new Exception(),
+            new Exception,
         ]),
     ]));
 
@@ -99,7 +99,7 @@ it('it_can_check_if_is_a_sleeping_cache_exception', function () {
 
     $data = ['host' => 'localhost', 'method' => 'GET',
         'exception' => 'it_can_check_if_is_a_sleeping_cache_exception',
-        'line'      => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception', ];
+        'line' => 2, 'file' => '/tmp/lett/tests/lettTest.php', 'class' => 'Exception', ];
 
     Carbon::setTestNow('2019-10-12 13:30:00');
 
@@ -146,8 +146,8 @@ it('it_filters_the_data_based_on_the_configuration', function () {
     expect(config()->get('lett.blacklist'))->toContain('*password*');
 
     $data = [
-        'password'      => 'testing',
-        'not_password'  => 'testing',
+        'password' => 'testing',
+        'not_password' => 'testing',
         'not_password2' => [
             'password' => 'testing',
         ],

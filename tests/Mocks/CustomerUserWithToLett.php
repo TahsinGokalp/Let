@@ -10,7 +10,7 @@ class CustomerUserWithToLett extends CustomerUser implements Lettable
     {
         return [
             'username' => $this->username,
-            'email'    => $this->email,
+            'email' => $this->email,
         ];
     }
 }

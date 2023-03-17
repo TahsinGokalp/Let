@@ -1,11 +1,11 @@
 <?php
 
-namespace TahsinGokalp\Lett\Fakes;
+namespace TahsinGokalp\Lett\Tests\Fakes;
 
 use GuzzleHttp\Psr7\Response;
+use JsonException;
 use PHPUnit\Framework\Assert as PHPUnit;
 use TahsinGokalp\Lett\Lett;
-use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 use Throwable;
 
 class LettFake extends Lett
@@ -53,12 +53,12 @@ class LettFake extends Lett
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
     {
         $this->exceptions[get_class($exception)][] = $exception;
 
-        return new Response(200, [], json_encode(['id' => LettClient::RESPONSE_ID], JSON_THROW_ON_ERROR));
+        return new Response(200, [], json_encode(['OK'], JSON_THROW_ON_ERROR));
     }
 }

@@ -67,13 +67,13 @@ class Lett
 
                 $index = $currentLine - 1;
 
-                if (!array_key_exists($index, $lines)) {
+                if (! array_key_exists($index, $lines)) {
                     continue;
                 }
 
                 $data['executor'][] = [
                     'line_number' => $currentLine,
-                    'line'        => $lines[$index],
+                    'line' => $lines[$index],
                 ];
             }
 
@@ -82,7 +82,7 @@ class Lett
 
         $rawResponse = $this->logError($data);
 
-        if (!$rawResponse) {
+        if (! $rawResponse) {
             return false;
         }
 
@@ -116,11 +116,6 @@ class Lett
         return true;
     }
 
-    private function setLastExceptionId(?string $id): void
-    {
-        $this->lastExceptionId = $id;
-    }
-
     public function getLastExceptionId(): ?string
     {
         return $this->lastExceptionId ?? null;
@@ -141,16 +136,16 @@ class Lett
         $data['class'] = get_class($exception);
         $data['storage'] = [
             'SERVER' => [
-                'USER'            => Request::server('USER'),
+                'USER' => Request::server('USER'),
                 'HTTP_USER_AGENT' => Request::server('HTTP_USER_AGENT'),
                 'SERVER_PROTOCOL' => Request::server('SERVER_PROTOCOL'),
                 'SERVER_SOFTWARE' => Request::server('SERVER_SOFTWARE'),
-                'PHP_VERSION'     => PHP_VERSION,
+                'PHP_VERSION' => PHP_VERSION,
             ],
-            'OLD'        => $this->filterVariables(Request::hasSession() ? Request::old() : []),
-            'COOKIE'     => $this->filterVariables(Request::cookie()),
-            'SESSION'    => $this->filterVariables(Request::hasSession() ? Session::all() : []),
-            'HEADERS'    => $this->filterVariables(Request::header()),
+            'OLD' => $this->filterVariables(Request::hasSession() ? Request::old() : []),
+            'COOKIE' => $this->filterVariables(Request::cookie()),
+            'SESSION' => $this->filterVariables(Request::hasSession() ? Session::all() : []),
+            'HEADERS' => $this->filterVariables(Request::header()),
             'PARAMETERS' => $this->filterVariables($this->filterParameterValues(Request::all())),
         ];
 
@@ -224,22 +219,6 @@ class Lett
         return [];
     }
 
-    private function getLineInfo($lines, $line, $i): array
-    {
-        $currentLine = $line + $i;
-
-        $index = $currentLine - 1;
-
-        if (!array_key_exists($index, $lines)) {
-            return [];
-        }
-
-        return [
-            'line_number' => $currentLine,
-            'line'        => $lines[$index],
-        ];
-    }
-
     public function isSkipException($exceptionClass): bool
     {
         return in_array((string) $exceptionClass, config('lett.except'), true);
@@ -252,25 +231,6 @@ class Lett
         }
 
         return Cache::has($this->createExceptionString($data));
-    }
-
-    private function createExceptionString(array $data): string
-    {
-        return 'lett.'.Str::slug($data['host'].'_'.$data['method'].
-                '_'.$data['exception'].'_'.$data['line'].'_'
-                .$data['file'].'_'.$data['class']);
-    }
-
-    private function logError($exception): PromiseInterface|ResponseInterface|null
-    {
-        try {
-            return $this->client->report([
-                'exception' => $exception,
-                'user'      => $this->getUser(),
-            ]);
-        } catch (GuzzleException $e) {
-            return null;
-        }
     }
 
     public function getUser(): ?array
@@ -295,5 +255,45 @@ class Lett
         $exceptionString = $this->createExceptionString($data);
 
         return Cache::put($exceptionString, $exceptionString, config('lett.sleep'));
+    }
+
+    private function setLastExceptionId(?string $id): void
+    {
+        $this->lastExceptionId = $id;
+    }
+
+    private function getLineInfo($lines, $line, $i): array
+    {
+        $currentLine = $line + $i;
+
+        $index = $currentLine - 1;
+
+        if (! array_key_exists($index, $lines)) {
+            return [];
+        }
+
+        return [
+            'line_number' => $currentLine,
+            'line' => $lines[$index],
+        ];
+    }
+
+    private function createExceptionString(array $data): string
+    {
+        return 'lett.' . Str::slug($data['host'] . '_' . $data['method'] .
+                '_' . $data['exception'] . '_' . $data['line'] . '_'
+                . $data['file'] . '_' . $data['class']);
+    }
+
+    private function logError($exception): PromiseInterface|ResponseInterface|null
+    {
+        try {
+            return $this->client->report([
+                'exception' => $exception,
+                'user' => $this->getUser(),
+            ]);
+        } catch (GuzzleException $e) {
+            return null;
+        }
     }
 }

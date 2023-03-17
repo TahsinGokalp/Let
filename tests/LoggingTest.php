@@ -1,7 +1,6 @@
 <?php
 
-use TahsinGokalp\Lett\Facade;
-use TahsinGokalp\Lett\Fakes\LettFake;
+use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
 it('it_will_not_send_log_information_to_lett', function () {
@@ -40,7 +39,7 @@ it('it_will_only_send_throwables_to_lett', function () {
         'project_key'
     ));
 
-    Facade::swap($lett);
+    \TahsinGokalp\Lett\Facades\Lett::fake($lett);
 
     $this->app['router']->get('/throwables-via-route', function () {
         throw new RuntimeException('exception-via-route');
@@ -48,7 +47,7 @@ it('it_will_only_send_throwables_to_lett', function () {
 
     $this->get('/throwables-via-route');
 
-    $total = count($lett->requestsSent());
+    $total = count(app('lett')->requestsSent());
 
     expect($total)->toBe(1);
 });

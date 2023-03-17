@@ -3,7 +3,6 @@
 namespace TahsinGokalp\Lett\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use TahsinGokalp\Lett\Http\Client;
 use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 

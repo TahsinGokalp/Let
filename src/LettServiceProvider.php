@@ -8,8 +8,8 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
 use TahsinGokalp\Lett\Commands\DoctorCommand;
 use TahsinGokalp\Lett\Commands\TestCommand;
-use TahsinGokalp\Lett\Http\Client;
 use TahsinGokalp\Lett\Handler\LettHandler;
+use TahsinGokalp\Lett\Http\Client;
 
 class LettServiceProvider extends BaseServiceProvider
 {

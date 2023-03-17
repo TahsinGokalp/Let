@@ -7,7 +7,6 @@ Laravel package for logging errors to [Lett-Tracker](https://github.com/TahsinGo
 
 [![Latest Version on Packagist](https://poser.pugx.org/tahsingokalp/lett/v/stable.svg)](https://packagist.org/packages/tahsingokalp/lett)
 [![Build Status](https://github.com/tahsingokalp/lett/workflows/run-tests/badge.svg)](https://github.com/tahsingokalp/lett/actions)
-[![StyleCI](https://github.styleci.io/repos/607028397/shield?branch=development)](https://github.styleci.io/repos/607028397?branch=development)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=bugs)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=TahsinGokalp_lett&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=TahsinGokalp_lett)

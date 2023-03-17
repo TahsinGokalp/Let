@@ -52,7 +52,7 @@ it('it_detects_that_it_fails_to_send_to_lett', function () {
         'project_key'
     ));
 
-    \TahsinGokalp\Lett\LettFacade::swap($lett);
+    \TahsinGokalp\Lett\Facades\Lett::swap($lett);
 
     $this->artisan('lett:test')
         ->expectsOutput('✓ [Lett] Sent exception to lett!')

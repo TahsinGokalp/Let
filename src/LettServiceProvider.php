@@ -9,7 +9,7 @@ use Monolog\Logger;
 use TahsinGokalp\Lett\Commands\DoctorCommand;
 use TahsinGokalp\Lett\Commands\TestCommand;
 use TahsinGokalp\Lett\Http\Client;
-use TahsinGokalp\Lett\Logger\LettHandler;
+use TahsinGokalp\Lett\Handler\LettHandler;
 
 class LettServiceProvider extends BaseServiceProvider
 {

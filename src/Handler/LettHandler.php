@@ -1,6 +1,6 @@
 <?php
 
-namespace TahsinGokalp\Lett\Logger;
+namespace TahsinGokalp\Lett\Handler;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;

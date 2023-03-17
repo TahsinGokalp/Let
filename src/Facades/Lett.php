@@ -11,7 +11,6 @@ use TahsinGokalp\Lett\Tests\Fakes\LettFake;
  */
 class Lett extends Facade
 {
-
     public static function fake(): void
     {
         static::swap(new LettFake(new Client('login_key', 'project_key')));

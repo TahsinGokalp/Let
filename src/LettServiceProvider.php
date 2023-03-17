@@ -13,7 +13,6 @@ use TahsinGokalp\Lett\Logger\LettHandler;
 
 class LettServiceProvider extends BaseServiceProvider
 {
-
     public function boot(): void
     {
         // Publish configuration file

@@ -1,3 +1,7 @@
+<p align="center">
+    <img width="130" src="logo.png">
+</p>
+
 # Lett
 Laravel package for logging errors to [Lett-Tracker](https://github.com/TahsinGokalp/lett-tracker)
 

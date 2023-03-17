@@ -124,7 +124,7 @@ return [
     | Verify SSL setting
     |--------------------------------------------------------------------------
     |
-    | Enables / disables the SSL verification when sending exceptions to LaraBug
+    | Enables / disables the SSL verification when sending exceptions to Lett
     | Never turn SSL verification off on production instances
     |
     */

@@ -4,7 +4,7 @@ namespace TahsinGokalp\Lett\Tests\Mocks;
 
 use GuzzleHttp\Psr7\Response;
 use JsonException;
-use TahsinGokalp\Lett\Http\Client;
+use TahsinGokalp\Lett\Client;
 
 class LettClient extends Client
 {

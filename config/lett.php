@@ -83,6 +83,8 @@ return [
 
     'sleep' => env('LETT_SLEEP', 60),
 
+    'timeout' => env('LETT_CLIENT_TIMEOUT', 15),
+
     /*
     |--------------------------------------------------------------------------
     | Skip exceptions

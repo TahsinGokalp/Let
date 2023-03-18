@@ -7,7 +7,7 @@ use Monolog\Level;
 use TahsinGokalp\Lett\Lett;
 use Throwable;
 
-class LettHandler extends AbstractProcessingHandler
+class LogHandler extends AbstractProcessingHandler
 {
     protected Lett $lett;
 

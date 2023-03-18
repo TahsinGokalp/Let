@@ -8,10 +8,10 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
 use TahsinGokalp\Lett\Commands\DoctorCommand;
 use TahsinGokalp\Lett\Commands\TestCommand;
-use TahsinGokalp\Lett\Handler\LettHandler;
-use TahsinGokalp\Lett\Http\Client;
+use TahsinGokalp\Lett\Handler\LogHandler;
+use TahsinGokalp\Lett\Client;
 
-class LettServiceProvider extends BaseServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     public function boot(): void
     {
@@ -48,7 +48,7 @@ class LettServiceProvider extends BaseServiceProvider
 
         if ($this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('lett', function ($app) {
-                $handler = new LettHandler(
+                $handler = new LogHandler(
                     $app['lett']
                 );
 

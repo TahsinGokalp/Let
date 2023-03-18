@@ -16,7 +16,7 @@ it('is_will_not_crash_if_let_returns_error_bad_response_exception', function () 
 
     config()->set('lett.environments', ['testing']);
 
-    $client->setGuzzleHttpClient(new Client([
+    $client->setHttpClient(new Client([
         'handler' => MockHandler::createWithMiddleware([
             new Response(500, [], '{}'),
         ]),
@@ -35,7 +35,7 @@ it('is_will_not_crash_if_let_returns_normal_exception', function () {
 
     config()->set('lett.environments', ['testing']);
 
-    $client->setGuzzleHttpClient(new Client([
+    $client->setHttpClient(new Client([
         'handler' => MockHandler::createWithMiddleware([
             new Exception,
         ]),

@@ -3,7 +3,7 @@
 namespace TahsinGokalp\Lett\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use TahsinGokalp\Lett\LettServiceProvider;
+use TahsinGokalp\Lett\ServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            LettServiceProvider::class,
+            ServiceProvider::class,
         ];
     }
 }

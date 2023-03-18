@@ -61,7 +61,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "TahsinGokalp\\Lett\\LettServiceProvider"
+              "TahsinGokalp\\Lett\\ServiceProvider"
             ],
             "aliases": {
                 "Lett": "TahsinGokalp\\Lett\\Facades\\Lett"

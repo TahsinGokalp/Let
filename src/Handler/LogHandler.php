@@ -4,10 +4,11 @@ namespace TahsinGokalp\Lett\Handler;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
+use Monolog\LogRecord;
 use TahsinGokalp\Lett\Lett;
 use Throwable;
 
-class LettHandler extends AbstractProcessingHandler
+class LogHandler extends AbstractProcessingHandler
 {
     protected Lett $lett;
 
@@ -18,7 +19,7 @@ class LettHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
-    protected function write($record): void
+    protected function write(LogRecord $record): void
     {
         if (isset($record['context']['exception']) && $record['context']['exception'] instanceof Throwable) {
             $this->lett->handle(

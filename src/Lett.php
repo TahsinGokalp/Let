@@ -2,7 +2,6 @@
 
 namespace TahsinGokalp\Lett;
 
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
@@ -15,7 +14,6 @@ use Illuminate\Support\Str;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use TahsinGokalp\Lett\Concerns\Lettable;
-use TahsinGokalp\Lett\Http\Client;
 use Throwable;
 
 class Lett
@@ -23,8 +21,6 @@ class Lett
     private Client $client;
 
     private array $blacklist;
-
-    private ?string $lastExceptionId;
 
     public function __construct(Client $client)
     {
@@ -35,7 +31,7 @@ class Lett
         }, config('lett.blacklist', []));
     }
 
-    public function handle(Throwable $exception, string $fileType = 'php', array $customData = [])
+    public function handle(Throwable $exception, string $fileType = 'php', array $customData = []): mixed
     {
         $data = $this->getExceptionData($exception);
 
@@ -44,7 +40,7 @@ class Lett
             return false;
         }
 
-        if ((string) $fileType === 'javascript') {
+        if ($fileType === 'javascript') {
             $data['fullUrl'] = $customData['url'];
             $data['file'] = $customData['file'];
             $data['file_type'] = $fileType;
@@ -88,12 +84,8 @@ class Lett
 
         try {
             $response = json_decode($rawResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             return false;
-        }
-
-        if (isset($response->id)) {
-            $this->setLastExceptionId($response->id);
         }
 
         if (config('lett.sleep') !== 0) {
@@ -114,11 +106,6 @@ class Lett
         }
 
         return true;
-    }
-
-    public function getLastExceptionId(): ?string
-    {
-        return $this->lastExceptionId ?? null;
     }
 
     public function getExceptionData(Throwable $exception): array
@@ -165,12 +152,12 @@ class Lett
         }
 
         for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-            $data['executor'][] = $this->getLineInfo($lines, $data['line'], $i);
+            $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], $i);
         }
         $data['executor'] = array_filter($data['executor']);
 
         // Get project version
-        $data['project_version'] = config('lett.project_version', null);
+        $data['project_version'] = config('lett.project_version');
 
         // to make symfony exception more readable
         if ($data['class'] === 'Symfony\Component\Debug\Exception\FatalErrorException') {
@@ -199,7 +186,7 @@ class Lett
         return $value instanceof UploadedFile;
     }
 
-    public function filterVariables($variables): array
+    public function filterVariables(mixed $variables): array
     {
         if (is_array($variables)) {
             array_walk($variables, function ($val, $key) use (&$variables) {
@@ -219,7 +206,7 @@ class Lett
         return [];
     }
 
-    public function isSkipException($exceptionClass): bool
+    public function isSkipException(string $exceptionClass): bool
     {
         return in_array((string) $exceptionClass, config('lett.except'), true);
     }
@@ -257,12 +244,7 @@ class Lett
         return Cache::put($exceptionString, $exceptionString, config('lett.sleep'));
     }
 
-    private function setLastExceptionId(?string $id): void
-    {
-        $this->lastExceptionId = $id;
-    }
-
-    private function getLineInfo($lines, $line, $i): array
+    private function getLineInfo(array $lines, int $line, int $i): array
     {
         $currentLine = $line + $i;
 
@@ -285,15 +267,11 @@ class Lett
                 . $data['file'] . '_' . $data['class']);
     }
 
-    private function logError($exception): PromiseInterface|ResponseInterface|null
+    private function logError(array $exception): PromiseInterface|ResponseInterface|null
     {
-        try {
-            return $this->client->report([
-                'exception' => $exception,
-                'user' => $this->getUser(),
-            ]);
-        } catch (GuzzleException $e) {
-            return null;
-        }
+        return $this->client->report([
+            'exception' => $exception,
+            'user' => $this->getUser(),
+        ]);
     }
 }

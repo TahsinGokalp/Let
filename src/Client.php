@@ -21,7 +21,7 @@ class Client
 
     private int $timeout;
 
-    public function __construct(string $login, string $project, ClientInterface $client = null)
+    public function __construct(string $login, string $project, PendingRequest|ClientInterface $client = null)
     {
         $this->login = $login;
         $this->project = $project;
@@ -31,10 +31,6 @@ class Client
 
     public function report(array $exception): PromiseInterface|ResponseInterface|null
     {
-        if ($this->getHttpClient() === null) {
-            return null;
-        }
-
         try {
             return $this->getHttpClient()
                 ->withToken($this->login)
@@ -56,7 +52,7 @@ class Client
                         ],
                         $exception
                     )
-                );
+                )->toPsrResponse();
         } catch (RequestException $e) {
             return $e->getResponse();
         } catch (GuzzleException|Exception) {
@@ -69,7 +65,7 @@ class Client
         return $this->client;
     }
 
-    public function setHttpClient(ClientInterface $client): self
+    public function setHttpClient(\GuzzleHttp\Client $client): self
     {
         $this->client = Http::timeout($this->timeout)->setClient($client)->buildClient();
 

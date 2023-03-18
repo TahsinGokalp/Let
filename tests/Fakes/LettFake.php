@@ -19,7 +19,7 @@ class LettFake extends Lett
     /**
      * @throws JsonException
      */
-    public function handle(Throwable $exception, $fileType = 'php', array $customData = [])
+    public function handle(Throwable $exception, $fileType = 'php', array $customData = []): mixed
     {
         $this->exceptions[get_class($exception)][] = $exception;
 

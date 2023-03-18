@@ -31,7 +31,7 @@ class Lett
         }, config('lett.blacklist', []));
     }
 
-    public function handle(Throwable $exception, string $fileType = 'php', array $customData = [])
+    public function handle(Throwable $exception, string $fileType = 'php', array $customData = []): mixed
     {
         $data = $this->getExceptionData($exception);
 
@@ -152,7 +152,7 @@ class Lett
         }
 
         for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-            $data['executor'][] = $this->getLineInfo($lines, $data['line'], $i);
+            $data['executor'][] = $this->getLineInfo($lines, (int)$data['line'], $i);
         }
         $data['executor'] = array_filter($data['executor']);
 
@@ -186,7 +186,7 @@ class Lett
         return $value instanceof UploadedFile;
     }
 
-    public function filterVariables($variables): array
+    public function filterVariables(mixed $variables): array
     {
         if (is_array($variables)) {
             array_walk($variables, function ($val, $key) use (&$variables) {
@@ -206,7 +206,7 @@ class Lett
         return [];
     }
 
-    public function isSkipException($exceptionClass): bool
+    public function isSkipException(string $exceptionClass): bool
     {
         return in_array((string) $exceptionClass, config('lett.except'), true);
     }
@@ -244,7 +244,7 @@ class Lett
         return Cache::put($exceptionString, $exceptionString, config('lett.sleep'));
     }
 
-    private function getLineInfo($lines, $line, $i): array
+    private function getLineInfo(array $lines, int $line, int $i): array
     {
         $currentLine = $line + $i;
 
@@ -267,7 +267,7 @@ class Lett
                 . $data['file'] . '_' . $data['class']);
     }
 
-    private function logError($exception): PromiseInterface|ResponseInterface|null
+    private function logError(array $exception): PromiseInterface|ResponseInterface|null
     {
         return $this->client->report([
             'exception' => $exception,

@@ -8,8 +8,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\PendingRequest;
-use Psr\Http\Message\ResponseInterface;
 use Illuminate\Support\Facades\Http;
+use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
@@ -42,7 +42,7 @@ class Client
                 ->acceptJson()
                 ->withUserAgent('Lett-Package')
                 ->when(
-                    !config('lett.verify_ssl'),
+                    ! config('lett.verify_ssl'),
                     function ($client) {
                         $client->withoutVerifying();
                     }

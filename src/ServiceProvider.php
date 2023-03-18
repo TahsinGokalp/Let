@@ -9,7 +9,6 @@ use Monolog\Logger;
 use TahsinGokalp\Lett\Commands\DoctorCommand;
 use TahsinGokalp\Lett\Commands\TestCommand;
 use TahsinGokalp\Lett\Handler\LogHandler;
-use TahsinGokalp\Lett\Client;
 
 class ServiceProvider extends BaseServiceProvider
 {

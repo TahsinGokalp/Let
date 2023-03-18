@@ -152,7 +152,7 @@ class Lett
         }
 
         for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-            $data['executor'][] = $this->getLineInfo($lines, (int)$data['line'], $i);
+            $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], $i);
         }
         $data['executor'] = array_filter($data['executor']);
 

@@ -40,7 +40,6 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/lett'),
         ]);
-
     }
 
     public function register(): void

@@ -36,7 +36,6 @@ it('it_detects_that_its_running_in_the_correct_environment', function () {
 });
 
 it('it_detects_that_it_fails_to_send_to_lett', function () {
-
     $this->artisan('lett:test')->run();
     $this->artisan('lett:test')
         ->expectsOutput(__('Failed to send exception to lett'))

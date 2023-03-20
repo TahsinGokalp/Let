@@ -28,7 +28,7 @@ class TestCommand extends Command
                 $this->info(__('Sent exception to lett'));
             } elseif (! is_bool($response)) {
                 $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-                if ((int)$response['code'] === ApiResponseCodeEnum::Success->value) {
+                if ((int) $response['code'] === ApiResponseCodeEnum::Success->value) {
                     $this->info(__('Sent exception to lett'));
                 } else {
                     $this->error(__('Failed to send exception to lett'));
@@ -37,7 +37,7 @@ class TestCommand extends Command
                 $this->error(__('Failed to send exception to lett'));
             }
         } catch (Exception $ex) {
-            $this->error(__('Failed to send exception to lett')." {$ex->getMessage()}");
+            $this->error(__('Failed to send exception to lett') . " {$ex->getMessage()}");
         }
 
         return self::SUCCESS;

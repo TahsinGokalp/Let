@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Console\Command;
 use RuntimeException;
 use TahsinGokalp\Lett\Lett;
+use TahsinGokalp\LettConstants\Enum\ApiResponseCodeEnum;
 
 class TestCommand extends Command
 {
@@ -24,19 +25,19 @@ class TestCommand extends Command
             );
 
             if (is_null($response)) {
-                $this->info('✓ [Lett] Sent exception to lett!');
+                $this->info(__('Sent exception to lett'));
             } elseif (! is_bool($response)) {
                 $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-                if ($response[0] === 'OK') {
-                    $this->info('✓ [Lett] Sent exception to lett!');
+                if ((int)$response['code'] === ApiResponseCodeEnum::Success->value) {
+                    $this->info(__('Sent exception to lett'));
                 } else {
-                    $this->error('✗ [Lett] Failed to send exception to lett');
+                    $this->error(__('Failed to send exception to lett'));
                 }
             } else {
-                $this->error('✗ [Lett] Failed to send exception to lett');
+                $this->error(__('Failed to send exception to lett'));
             }
         } catch (Exception $ex) {
-            $this->error("✗ [Lett] Failed to send {$ex->getMessage()}");
+            $this->error(__('Failed to send exception to lett')." {$ex->getMessage()}");
         }
 
         return self::SUCCESS;
@@ -45,7 +46,7 @@ class TestCommand extends Command
     public function generateException(): ?Exception
     {
         try {
-            throw new RuntimeException('This is a test exception from the Lett console');
+            throw new RuntimeException(__('This is a test exception from the Lett console'));
         } catch (RuntimeException $ex) {
             return $ex;
         }

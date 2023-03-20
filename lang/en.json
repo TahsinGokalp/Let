@@ -1,0 +1,11 @@
+{
+    "Found API key": "Found API key",
+    "Could not find your API key, set this in your .env": "Could not API your login key, set this in your .env",
+    "Found project key": "Found project key",
+    "Could not find your project key, set this in your .env": "Could not find your project key, set this in your .env",
+    "Correct environment found ()": "Correct environment found (:environment)",
+    "Environment () not allowed to send errors to Lett, set this in your config": "Environment (:environment) not allowed to send errors to Lett, set this in your config",
+    "Sent exception to lett": "Sent exception to lett",
+    "Failed to send exception to lett": "Failed to send exception to lett",
+    "This is a test exception from the Lett console": "This is a test exception from the Lett console"
+}

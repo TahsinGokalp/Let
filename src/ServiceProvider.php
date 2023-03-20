@@ -32,6 +32,15 @@ class ServiceProvider extends BaseServiceProvider
             TestCommand::class,
             DoctorCommand::class,
         ]);
+
+        // Register language files
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'lett');
+
+        //Publish language files
+        $this->publishes([
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/lett'),
+        ]);
+
     }
 
     public function register(): void

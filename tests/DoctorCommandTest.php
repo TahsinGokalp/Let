@@ -1,38 +1,60 @@
 <?php
 
+use TahsinGokalp\Lett\Events\ApiKeyNotFound;
+use TahsinGokalp\Lett\Events\EnvironmentNotFound;
+use TahsinGokalp\Lett\Events\FoundApiKey;
+use TahsinGokalp\Lett\Events\FoundEnvironment;
+use TahsinGokalp\Lett\Events\FoundProjectKey;
+use TahsinGokalp\Lett\Events\ProjectKeyNotFound;
 use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
+use Illuminate\Support\Facades\Event;
 
-it('it_detects_if_the_login_key_is_set', function () {
+beforeEach(static function () {
+    Event::fake();
+});
+
+it('it_detects_if_the_login_key_is_set', static function () {
     config()->set('lett.login_key', '');
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Could not find your API key, set this in your .env'))->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(ApiKeyNotFound::class);
 
     config()->set('lett.login_key', 'test');
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Found API key'))->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(FoundApiKey::class);
 });
 
-it('it_detects_if_the_project_key_is_set', function () {
+it('it_detects_if_the_project_key_is_set', static function () {
     config()->set('lett.project_key', '');
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Could not find your project key, set this in your .env'))->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(ProjectKeyNotFound::class);
 
     config()->set('lett.project_key', 'test');
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Found project key'))->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(FoundProjectKey::class);
 });
 
-it('it_detects_that_its_running_in_the_correct_environment', function () {
+it('it_detects_that_its_running_in_the_correct_environment', static function () {
     config()->set('app.env', 'production');
     config()->set('lett.environments', []);
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Environment () not allowed to send errors to Lett, set this in your config', ['environment' => config('app.env')]))
-        ->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(EnvironmentNotFound::class);
 
     config()->set('lett.environments', ['production']);
 
-    test()->artisan('lett:doctor')->expectsOutput(__('Correct environment found ()', ['environment' => config('app.env')]))->assertExitCode(0);
+    test()->artisan('lett:doctor')->assertExitCode(0);
+
+    Event::assertDispatched(FoundEnvironment::class);
 });
 
 it('it_detects_that_it_fails_to_send_to_lett', function () {

@@ -14,6 +14,10 @@ use Illuminate\Support\Str;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use TahsinGokalp\Lett\Concerns\Lettable;
+use TahsinGokalp\Lett\Events\JsonDecodeException;
+use TahsinGokalp\Lett\Events\SkipEnvironment;
+use TahsinGokalp\Lett\Events\SkipException;
+use TahsinGokalp\Lett\Events\SleepingException;
 use Throwable;
 
 class Lett
@@ -85,6 +89,8 @@ class Lett
         try {
             $response = json_decode($rawResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
+            event(new JsonDecodeException());
+
             return false;
         }
 
@@ -97,14 +103,11 @@ class Lett
 
     public function isSkipEnvironment(): bool
     {
-        if (count(config('lett.environments')) === 0) {
-            return true;
-        }
-
-        if (in_array((string) App::environment(), config('lett.environments'), true)) {
+        if (count(config('lett.environments')) > 0 && in_array((string) App::environment(), config('lett.environments'), true)) {
             return false;
         }
 
+        event(new SkipEnvironment());
         return true;
     }
 
@@ -208,16 +211,23 @@ class Lett
 
     public function isSkipException(string $exceptionClass): bool
     {
-        return in_array((string) $exceptionClass, config('lett.except'), true);
+        if(in_array((string) $exceptionClass, config('lett.except'), true)){
+            event(new SkipException());
+
+            return true;
+        }
+
+        return false;
     }
 
     public function isSleepingException(array $data): bool
     {
-        if ((int) config('lett.sleep', 0) === 0) {
+        if ((int) config('lett.sleep', 0) === 0 || !Cache::has($this->createExceptionString($data))) {
             return false;
         }
+        event(new SleepingException());
 
-        return Cache::has($this->createExceptionString($data));
+        return true;
     }
 
     public function getUser(): ?array

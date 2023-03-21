@@ -20,18 +20,18 @@ class DoctorCommand extends Command
     {
         if (config('lett.login_key')) {
             $this->info(__('Found API key'));
-            event(new FoundApiKey());
+            event(new FoundApiKey);
         } else {
             $this->error(__('Could not find your API key, set this in your .env'));
-            event(new ApiKeyNotFound());
+            event(new ApiKeyNotFound);
         }
 
         if (config('lett.project_key')) {
             $this->info(__('Found project key'));
-            event(new FoundProjectKey());
+            event(new FoundProjectKey);
         } else {
             $this->error(__('Could not find your project key, set this in your .env'));
-            event(new ProjectKeyNotFound());
+            event(new ProjectKeyNotFound);
         }
 
         if (in_array((string) config('app.env'), config('lett.environments'), true)) {

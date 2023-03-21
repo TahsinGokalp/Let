@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Event;
 use TahsinGokalp\Lett\Events\ApiKeyNotFound;
 use TahsinGokalp\Lett\Events\EnvironmentNotFound;
 use TahsinGokalp\Lett\Events\FoundApiKey;
@@ -8,7 +9,6 @@ use TahsinGokalp\Lett\Events\FoundProjectKey;
 use TahsinGokalp\Lett\Events\ProjectKeyNotFound;
 use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
-use Illuminate\Support\Facades\Event;
 
 beforeEach(static function () {
     Event::fake();

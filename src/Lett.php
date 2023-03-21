@@ -89,7 +89,7 @@ class Lett
         try {
             $response = json_decode($rawResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
-            event(new JsonDecodeException());
+            event(new JsonDecodeException);
 
             return false;
         }
@@ -107,7 +107,8 @@ class Lett
             return false;
         }
 
-        event(new SkipEnvironment());
+        event(new SkipEnvironment);
+
         return true;
     }
 
@@ -211,8 +212,8 @@ class Lett
 
     public function isSkipException(string $exceptionClass): bool
     {
-        if(in_array((string) $exceptionClass, config('lett.except'), true)){
-            event(new SkipException());
+        if (in_array((string) $exceptionClass, config('lett.except'), true)) {
+            event(new SkipException);
 
             return true;
         }
@@ -222,10 +223,10 @@ class Lett
 
     public function isSleepingException(array $data): bool
     {
-        if ((int) config('lett.sleep', 0) === 0 || !Cache::has($this->createExceptionString($data))) {
+        if ((int) config('lett.sleep', 0) === 0 || ! Cache::has($this->createExceptionString($data))) {
             return false;
         }
-        event(new SleepingException());
+        event(new SleepingException);
 
         return true;
     }

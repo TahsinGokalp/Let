@@ -83,6 +83,15 @@ return [
 
     'sleep' => env('LETT_SLEEP', 60),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Client timeout
+    |--------------------------------------------------------------------------
+    |
+    | This setting determines the timeout for the client.
+    |
+    */
+
     'timeout' => env('LETT_CLIENT_TIMEOUT', 15),
 
     /*
@@ -130,6 +139,7 @@ return [
     | Never turn SSL verification off on production instances
     |
     */
+
     'verify_ssl' => env('LETT_VERIFY_SSL', true),
 
 ];

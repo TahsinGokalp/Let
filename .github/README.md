@@ -28,32 +28,6 @@ And adjust config file (`config/lett.php`) with your desired settings.
 
 Note: by default only production environments will report errors. To modify this edit your Let configuration.
 
-## Installation on lumen
-You can install the package through Composer.
-```bash
-composer require tahsingokalp/lett
-```
-
-Copy the config file (`lett.php`) to lumen config directory.
-```bash
-php -r "file_exists('config/') || mkdir('config/'); copy('vendor/tahsingokalp/lett/config/lett.php', 'config/lett.php');"
-```
-And adjust config file (`config/lett.php`) with your desired settings.
-
-In `bootstrap/app.php` you will need to:
-- Uncomment this line:
-    ```php
-    $app->withFacades();
-    ```
-- Register the lett config file:
-    ```php
-    $app->configure('lett');
-    ```
-- Register lett service provider:
-    ```php
-    $app->register(Lett\LettServiceProvider::class);
-    ```
-
 ## Configuration variables
 All that is left to do is to define two env configuration variables.
 ```
@@ -64,7 +38,7 @@ LETT_PROJECT_KEY=
 
 `LETT_PROJECT_KEY` is your project API key which you've received when creating a project.
 
-Install lett-tracker to your host and get the variables
+Install lett-tracker to your host and get the variables.
 
 ## Reporting unhandled exceptions
 You can use lett as a log-channel by adding the following config to the `channels` section in `config/logging.php`:
@@ -87,11 +61,7 @@ After that you can add it to the stack section:
 ],
 ```
 
-PS: If you're using lumen, it could be that you don't have the `logging.php` file. So, you can use default logging file from
-framework core and make changes above.
-```bash
-php -r "file_exists('config/') || mkdir('config/'); copy('vendor/laravel/lumen-framework/config/logging.php', 'config/logging.php');"
-```
+Now all unhandled exceptions will be reported to Lett.
 
 ## License
 The Let package is open source software licensed under the [license MIT](http://opensource.org/licenses/MIT)

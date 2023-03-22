@@ -34,11 +34,11 @@ class ServiceProvider extends BaseServiceProvider
         ]);
 
         // Register language files
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'lett');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'lett');
 
         //Publish language files
         $this->publishes([
-            __DIR__.'/../lang' => $this->app->langPath('vendor/lett'),
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/lett'),
         ]);
     }
 

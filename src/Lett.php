@@ -2,7 +2,6 @@
 
 namespace TahsinGokalp\Lett;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\UploadedFile;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use TahsinGokalp\Lett\Concerns\Lettable;
 use TahsinGokalp\Lett\Events\JsonDecodeException;
 use TahsinGokalp\Lett\Events\SkipEnvironment;
@@ -52,14 +50,14 @@ class Lett
         }
 
         try {
-            if(!method_exists($rawResponse, 'getBody')){
-                throw new JsonException();
+            if (! method_exists($rawResponse, 'getBody')) {
+                throw new JsonException;
             }
 
             $body = $rawResponse->getBody();
 
-            if(!method_exists($body, 'getContents')){
-                throw new JsonException();
+            if (! method_exists($body, 'getContents')) {
+                throw new JsonException;
             }
 
             $response = json_decode($body->getContents(), false, 512, JSON_THROW_ON_ERROR);
@@ -127,13 +125,13 @@ class Lett
 
         $lines = file($data['file']);
 
-        if($lines !== false){
+        if ($lines !== false) {
             if (count($lines) < $count) {
                 $count = count($lines) - $data['line'];
             }
 
             for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-                $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], (int)$i);
+                $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], (int) $i);
             }
         }
 

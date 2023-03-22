@@ -17,7 +17,6 @@ beforeEach(function () {
 });
 
 it('it_detects_if_the_login_key_is_set', function () {
-
     config()->set('lett.login_key', '');
 
     test()->artisan('lett:doctor')->assertExitCode(0);

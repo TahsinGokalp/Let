@@ -5,7 +5,11 @@ namespace TahsinGokalp\Lett\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use RuntimeException;
+use TahsinGokalp\Lett\Events\FailedToSentExceptionToLett;
+use TahsinGokalp\Lett\Events\SentExceptionToLett;
 use TahsinGokalp\Lett\Lett;
+use TahsinGokalp\LettConstants\Enum\ApiResponseCodeEnum;
+use Throwable;
 
 class TestCommand extends Command
 {
@@ -24,28 +28,33 @@ class TestCommand extends Command
             );
 
             if (is_null($response)) {
-                $this->info('✓ [Lett] Sent exception to lett!');
+                $this->info(trans('lett::lett.sent_exception_to_lett'));
+                event(new SentExceptionToLett);
             } elseif (! is_bool($response)) {
                 $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-                if ($response[0] === 'OK') {
-                    $this->info('✓ [Lett] Sent exception to lett!');
+                if ((int) $response['code'] === ApiResponseCodeEnum::Success->value) {
+                    $this->info(trans('lett::lett.sent_exception_to_lett'));
+                    event(new SentExceptionToLett);
                 } else {
-                    $this->error('✗ [Lett] Failed to send exception to lett');
+                    $this->error(trans('lett::lett.failed_to_send_exception_to_lett'));
+                    event(new FailedToSentExceptionToLett);
                 }
             } else {
-                $this->error('✗ [Lett] Failed to send exception to lett');
+                $this->error(trans('lett::lett.failed_to_send_exception_to_lett'));
+                event(new FailedToSentExceptionToLett);
             }
         } catch (Exception $ex) {
-            $this->error("✗ [Lett] Failed to send {$ex->getMessage()}");
+            $this->error(trans('lett::lett.failed_to_send_exception_to_lett') . " {$ex->getMessage()}");
+            event(new FailedToSentExceptionToLett);
         }
 
         return self::SUCCESS;
     }
 
-    public function generateException(): ?Exception
+    public function generateException(): Throwable
     {
         try {
-            throw new RuntimeException('This is a test exception from the Lett console');
+            throw new RuntimeException(trans('lett::lett.this_is_a_test_exception_from_the_lett_console'));
         } catch (RuntimeException $ex) {
             return $ex;
         }

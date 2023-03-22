@@ -32,6 +32,14 @@ class ServiceProvider extends BaseServiceProvider
             TestCommand::class,
             DoctorCommand::class,
         ]);
+
+        // Register language files
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'lett');
+
+        //Publish language files
+        $this->publishes([
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/lett'),
+        ]);
     }
 
     public function register(): void
@@ -45,7 +53,7 @@ class ServiceProvider extends BaseServiceProvider
             ));
         });
 
-        if ($this->app['log'] instanceof LogManager) {
+        if (isset($this->app['log']) && $this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('lett', function ($app) {
                 $handler = new LogHandler(
                     $app['lett']

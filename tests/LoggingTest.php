@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+use TahsinGokalp\Lett\Facades\Lett;
 use TahsinGokalp\Lett\Tests\Fakes\LettFake;
 use TahsinGokalp\Lett\Tests\Mocks\LettClient;
 
@@ -14,7 +16,7 @@ it('it_will_not_send_log_information_to_lett', function () {
     );
 
     $this->app['router']->get('/log-information-via-route/{type}', function (string $type) {
-        \Illuminate\Support\Facades\Log::{$type}('log');
+        Log::{$type}('log');
     });
 
     $this->get('/log-information-via-route/debug');
@@ -39,7 +41,7 @@ it('it_will_only_send_throwables_to_lett', function () {
         'project_key'
     ));
 
-    \TahsinGokalp\Lett\Facades\Lett::fake($lett);
+    Lett::fake($lett);
 
     $this->app['router']->get('/throwables-via-route', function () {
         throw new RuntimeException('exception-via-route');

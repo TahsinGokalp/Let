@@ -19,7 +19,7 @@ class LettClient extends Client
         $this->requests[] = $exception;
 
         return new Response(200, [], json_encode([
-            'message' => trans('lett-constants::' . ApiResponseCodeEnum::Success->name),
+            'message' => trans('lett-constants::constants.' . ApiResponseCodeEnum::Success->name),
             'code' => ApiResponseCodeEnum::Success->value,
         ], JSON_THROW_ON_ERROR));
     }

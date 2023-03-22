@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
-    protected PendingRequest|ClientInterface $client;
+    protected PendingRequest $client;
 
     protected string $login;
 
@@ -21,7 +21,7 @@ class Client
 
     private int $timeout;
 
-    public function __construct(string $login, string $project, PendingRequest|ClientInterface $client = null)
+    public function __construct(string $login, string $project, PendingRequest $client = null)
     {
         $this->login = $login;
         $this->project = $project;
@@ -29,7 +29,7 @@ class Client
         $this->client = $client ?: Http::timeout($this->timeout);
     }
 
-    public function report(array $exception): PromiseInterface|ResponseInterface|null
+    public function report(array $exception): ?ResponseInterface
     {
         try {
             return $this->getHttpClient()
@@ -60,14 +60,14 @@ class Client
         }
     }
 
-    public function getHttpClient(): PendingRequest|ClientInterface
+    public function getHttpClient(): PendingRequest
     {
         return $this->client;
     }
 
     public function setHttpClient(\GuzzleHttp\Client $client): self
     {
-        $this->client = Http::timeout($this->timeout)->setClient($client)->buildClient();
+        $this->client = Http::timeout($this->timeout)->setClient($client);
 
         return $this;
     }

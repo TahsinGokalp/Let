@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use TahsinGokalp\Lett\Concerns\Lettable;
 use TahsinGokalp\Lett\Events\JsonDecodeException;
 use TahsinGokalp\Lett\Events\SkipEnvironment;
@@ -35,49 +36,13 @@ class Lett
         }, config('lett.blacklist', []));
     }
 
-    public function handle(Throwable $exception, string $fileType = 'php', array $customData = []): mixed
+    public function handle(Throwable $exception): mixed
     {
         $data = $this->getExceptionData($exception);
 
         if ($this->isSkipEnvironment() || $this->isSkipException($data['class'])
             || $this->isSleepingException($data)) {
             return false;
-        }
-
-        if ($fileType === 'javascript') {
-            $data['fullUrl'] = $customData['url'];
-            $data['file'] = $customData['file'];
-            $data['file_type'] = $fileType;
-            $data['error'] = $customData['message'];
-            $data['exception'] = $customData['stack'];
-            $data['line'] = $customData['line'];
-            $data['class'] = null;
-
-            $count = config('lett.lines_count');
-
-            if ($count > 50) {
-                $count = 12;
-            }
-
-            $lines = file($data['file']);
-            $data['executor'] = [];
-
-            for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-                $currentLine = $data['line'] + $i;
-
-                $index = $currentLine - 1;
-
-                if (! array_key_exists($index, $lines)) {
-                    continue;
-                }
-
-                $data['executor'][] = [
-                    'line_number' => $currentLine,
-                    'line' => $lines[$index],
-                ];
-            }
-
-            $data['executor'] = array_filter($data['executor']);
         }
 
         $rawResponse = $this->logError($data);
@@ -87,7 +52,17 @@ class Lett
         }
 
         try {
-            $response = json_decode($rawResponse->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
+            if(!method_exists($rawResponse, 'getBody')){
+                throw new JsonException();
+            }
+
+            $body = $rawResponse->getBody();
+
+            if(!method_exists($body, 'getContents')){
+                throw new JsonException();
+            }
+
+            $response = json_decode($body->getContents(), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             event(new JsonDecodeException);
 
@@ -148,16 +123,20 @@ class Lett
             $count = 12;
         }
 
-        $lines = file($data['file']);
         $data['executor'] = [];
 
-        if (count($lines) < $count) {
-            $count = count($lines) - $data['line'];
+        $lines = file($data['file']);
+
+        if($lines !== false){
+            if (count($lines) < $count) {
+                $count = count($lines) - $data['line'];
+            }
+
+            for ($i = -1 * abs($count); $i <= abs($count); $i++) {
+                $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], (int)$i);
+            }
         }
 
-        for ($i = -1 * abs($count); $i <= abs($count); $i++) {
-            $data['executor'][] = $this->getLineInfo($lines, (int) $data['line'], $i);
-        }
         $data['executor'] = array_filter($data['executor']);
 
         // Get project version
@@ -278,7 +257,7 @@ class Lett
                 . $data['file'] . '_' . $data['class']);
     }
 
-    private function logError(array $exception): PromiseInterface|ResponseInterface|null
+    private function logError(array $exception): ResponseInterface|null
     {
         return $this->client->report([
             'exception' => $exception,

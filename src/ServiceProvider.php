@@ -34,11 +34,11 @@ class ServiceProvider extends BaseServiceProvider
         ]);
 
         // Register language files
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'lett');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'lett');
 
         //Publish language files
         $this->publishes([
-            __DIR__ . '/../lang' => $this->app->langPath('vendor/lett'),
+            __DIR__.'/../lang' => $this->app->langPath('vendor/lett'),
         ]);
     }
 
@@ -53,7 +53,7 @@ class ServiceProvider extends BaseServiceProvider
             ));
         });
 
-        if ($this->app['log'] instanceof LogManager) {
+        if (isset($this->app['log']) && $this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('lett', function ($app) {
                 $handler = new LogHandler(
                     $app['lett']

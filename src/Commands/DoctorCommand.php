@@ -19,26 +19,26 @@ class DoctorCommand extends Command
     public function handle(): int
     {
         if (config('lett.login_key')) {
-            $this->info(__('Found API key'));
+            $this->info(trans('lett::lett.found_api_key'));
             event(new FoundApiKey);
         } else {
-            $this->error(__('Could not find your API key, set this in your .env'));
+            $this->error(trans('lett::lett.could_not_find_api_key'));
             event(new ApiKeyNotFound);
         }
 
         if (config('lett.project_key')) {
-            $this->info(__('Found project key'));
+            $this->info(trans('lett::lett.found_project_key'));
             event(new FoundProjectKey);
         } else {
-            $this->error(__('Could not find your project key, set this in your .env'));
+            $this->error(trans('lett::lett.could_not_find_project_key'));
             event(new ProjectKeyNotFound);
         }
 
         if (in_array((string) config('app.env'), config('lett.environments'), true)) {
-            $this->info(__('Correct environment found ()', ['environment' => config('app.env')]));
+            $this->info(trans('lett::lett.correct_environment_found_environment', ['environment' => config('app.env')]));
             event(new FoundEnvironment(config('app.env')));
         } else {
-            $this->error(__('Environment () not allowed to send errors to Lett, set this in your config', ['environment' => config('app.env')]));
+            $this->error(trans('lett::lett.environment_environment_not_allowed_to_send_errors_to_lett_set_this_in_your_config', ['environment' => config('app.env')]));
             event(new EnvironmentNotFound(config('app.env')));
         }
 
